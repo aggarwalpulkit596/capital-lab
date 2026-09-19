@@ -30,7 +30,7 @@ jobs:
         if: always()
         with:
           name: backend-test-reports
-          path: build/reports/tests
+          path: build/reports
           retention-days: 7
   browser:
     runs-on: ubuntu-24.04
