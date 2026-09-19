@@ -1,47 +1,302 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Capital Lab · Follow the money</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
-<body>
-<aside class="sidebar">
-  <a class="brand" href="/" aria-label="Capital Lab home"><span class="brandmark">C<span>↗</span></span><span>Capital Lab<small>THE RECEIVABLES SANDBOX</small></span></a>
-  <div class="local-badge"><i></i> LOCAL WORKSPACE <span>USD</span></div>
-  <p class="nav-label">EXPLORE THE SYSTEM</p>
-  <nav aria-label="Dashboard sections">
-    <button class="nav-item active" data-view="workbench"><span>◫</span> Scenario workbench</button>
-    <button class="nav-item" data-view="dataset"><span>▥</span> Public data replay</button>
-    <button class="nav-item" data-view="architecture"><span>⌘</span> How it connects</button>
-  </nav>
-  <div class="sidebar-bottom"><span class="tiny-tag">LEARNING IN PUBLIC</span><p>Real transactions.<br>Simulated money.<br>Visible decisions.</p><small>Independent learning project.<br>Not affiliated with RevenueCat.</small></div>
-</aside>
-<main>
-  <header class="topbar"><span>Workspace <span class="slash">/</span> <b id="breadcrumb">Scenario workbench</b></span><span class="environment"><i></i> SIMULATION MODE</span></header>
-  <div class="page">
-  <div id="error" class="error hidden" role="alert"></div>
-  <section id="workbench" class="view">
-    <div class="page-heading"><div><div class="eyebrow">FOLLOW THE MONEY</div><h1>Small decisions. Real consequences.</h1><p>Run an advance, break a dependency, and watch the system recover.</p></div><button id="export" class="button secondary" disabled>↓ Export run</button></div>
-    <div class="workbench-layout">
-      <section class="panel library"><div class="panel-title"><h2>Scenario library</h2><span id="scenario-count" class="count">20</span></div><label class="sr-only" for="scenario-search">Search scenarios</label><input id="scenario-search" placeholder="Search scenarios…" type="search"><div class="filter-row" id="filters"></div><div id="scenario-list" class="scenario-list"></div></section>
-      <div class="workspace">
-        <section class="panel runner"><div class="runner-top"><div><div id="scenario-category" class="eyebrow">RECOVERY</div><h2 id="scenario-title">Paid, but the response vanished</h2></div><span id="run-status" class="pill neutral">READY TO EXPLORE</span></div><p id="scenario-description"></p><div class="runner-controls"><button id="start" class="button primary">Start scenario <span>↗</span></button><button id="next" class="button secondary" disabled>Next step →</button><button id="run-all" class="text-button" disabled>Run remaining steps</button><span id="progress-label" class="muted">No run started</span></div><div id="step-track" class="step-track"></div></section>
-        <div id="metrics" class="metrics"></div>
-        <section class="panel flow-panel"><div class="panel-title"><h2>Connected workflow</h2><span class="muted">Click a component to inspect its evidence</span></div><div id="flow" class="flow"></div></section>
-        <section class="panel evidence"><div class="tabs" role="tablist" aria-label="Run evidence"><button role="tab" data-tab="timeline" class="selected" aria-selected="true">Timeline</button><button role="tab" data-tab="decision" aria-selected="false">Decision & risk</button><button role="tab" data-tab="bank" aria-selected="false">Bank & outbox</button><button role="tab" data-tab="ledger" aria-selected="false">Ledger</button><button role="tab" data-tab="reconciliation" aria-selected="false">Reconciliation</button></div><div id="evidence-body" role="tabpanel"></div></section>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Capital Lab · Follow the money</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Capital Lab home"
+        ><span class="brandmark">C<span>↗</span></span
+        ><span>Capital Lab<small>THE RECEIVABLES SANDBOX</small></span></a
+      >
+      <div class="local-badge"><i></i> LOCAL WORKSPACE <span>USD</span></div>
+      <p class="nav-label">YOUR WORKSPACE</p>
+      <nav aria-label="Dashboard sections">
+        <button class="nav-item active" data-view="developer">
+          <span>↗</span> Developer payouts
+        </button>
+        <button class="nav-item" data-view="operations"><span>▤</span> Finance operations</button>
+        <div class="nav-divider">ENGINEERING REFERENCE</div>
+        <button class="nav-item" data-view="workbench"><span>◫</span> Scenario workbench</button>
+        <button class="nav-item" data-view="dataset"><span>▥</span> Public data replay</button>
+        <button class="nav-item" data-view="architecture"><span>⌘</span> How it connects</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <span class="tiny-tag">LEARNING IN PUBLIC</span>
+        <p>Real transactions.<br />Simulated money.<br />Visible decisions.</p>
+        <small>Independent learning project.<br />Not affiliated with RevenueCat.</small>
       </div>
-    </div>
-    <div class="footnote">All payments use synthetic USD. Risk thresholds are illustrative. Each run has isolated PostgreSQL data; the bank commits independently.</div>
-  </section>
-  <section id="dataset" class="view hidden">
-    <div class="page-heading"><div><div class="eyebrow">FROM OBSERVATION TO SIMULATION</div><h1>A real dataset. An explicit boundary.</h1><p>Explore historical sales and cancellations, then replay a day through the lab.</p></div></div>
-    <div id="dataset-summary" class="metrics"></div>
-    <section class="panel dataset-chart"><div class="panel-title"><div><h2>Daily retail activity</h2><p class="muted">Original GBP values · click a bar to select an observed day</p></div><span class="chart-key"><i></i> Gross sales <i class="cancel"></i> Cancellations</span></div><div id="chart" class="chart"></div><div class="chart-axis"><span>DEC 2010</span><span>APR 2011</span><span>AUG 2011</span><span>DEC 2011</span></div></section>
-    <div class="dataset-grid"><section class="panel"><h2>Choose a day to replay</h2><label for="dataset-date">Observed invoice date</label><select id="dataset-date"></select><div id="selected-day"></div><button id="replay-data" class="button primary">Replay this day →</button></section><section class="panel"><h2>What the data can tell us</h2><p>Sales and cancellations from one UK retailer. No subscription renewals, app-store receivables, settlement delays, or confirmed fraud labels.</p><div class="callout">The lab converts GBP to simulated USD at a fixed <b>1.25 USD/GBP</b> and maps the selected historical day onto a fresh demo reporting period. This is an illustrative transformation, not historical FX or an actual financing decision.</div><p>The velocity baseline uses only the preceding seven <b>observed</b> days. Missing calendar dates are not filled. Low history is visible; it is not silently treated as a reliable baseline.</p><div id="dataset-attribution" class="attribution"></div></section></div>
-  </section>
-  <section id="architecture" class="view hidden">
-    <div class="page-heading"><div><div class="eyebrow">ONE APPLICATION · CLEAR BOUNDARIES</div><h1>How the pieces talk.</h1><p>Follow the evidence from a source report to a reconciled payment.</p></div></div>
-    <section class="panel architecture-map"><div class="architecture-lane"><article><span>01 / SOURCE</span><h2>Reports & replay</h2><p>Synthetic store snapshots or attributed UCI daily aggregates. Coverage is distinct from download time.</p><small>IMPLEMENTED · ADAPTER</small></article><b>→</b><article><span>02 / DECIDE</span><h2>Eligibility & monitoring</h2><p>Integer money, capacity checks, stale-report holds, cancellation and velocity rules with visible reasons.</p><small>IMPLEMENTED · ILLUSTRATIVE RULES</small></article><b>→</b><article><span>03 / RESERVE</span><h2>Advance orchestrator</h2><p>PostgreSQL transactions reserve borrower capacity and funding cash, freeze the command, and write an outbox.</p><small>IMPLEMENTED · POSTGRESQL</small></article></div><div class="architecture-lane"><article><span>06 / VERIFY</span><h2>Ledger & reconciliation</h2><p>Balanced funding journals, bank debit matching, and a bounded final collection allocation. Exceptions stay visible.</p><small>IMPLEMENTED · BOUNDED SCOPE</small></article><b>←</b><article><span>05 / OBSERVE</span><h2>Simulated bank</h2><p>Independent transactions and real loopback HTTP. Can pay, reject, lose a response, or return an existing result.</p><small>IMPLEMENTED · SYNTHETIC CASH</small></article><b>←</b><article><span>04 / EXECUTE</span><h2>Dispatch & recovery</h2><p>Leased workers call the bank after commit. Recovery queries the same identity; holds forbid resubmission.</p><small>IMPLEMENTED · DURABLE INTENT</small></article></div></section>
-    <div class="dataset-grid"><section class="panel"><h2>The invariants we defend</h2><ul><li>One request identity binds one immutable payment command.</li><li>Unknown bank outcomes keep their reservations.</li><li>A hold prevents recovery from submitting a new bank request.</li><li>Repayment never recycles already-funded earnings.</li><li>Every posted journal balances; history is append-only.</li><li>A discrepancy opens an exception, not an invented adjustment.</li></ul></section><section class="panel"><h2>Where this prototype stops</h2><p>The broader architecture documents real provider integrations, fraud models, returns, multi-currency, partial and aggregated collections, residual payouts, authentication, and deployment controls. Those are not implemented here.</p><p>The dashboard's worker-stop scenario interrupts execution in-process. The integration suite separately tests an actual child-JVM halt. Opening balances are fixtures, not a full opening general ledger.</p><span class="pill neutral">LOCAL WALKTHROUGH · NOT A PUBLIC BANKING SERVICE</span></section></div>
-  </section>
-  </div>
-</main>
-<div id="busy-status" class="sr-only" role="status" aria-live="polite"></div>
-</body></html>
+    </aside>
+    <main>
+      <header class="topbar">
+        <span>Workspace <span class="slash">/</span> <b id="breadcrumb">Developer payouts</b></span
+        ><span class="environment"><i></i> SIMULATION MODE</span>
+      </header>
+      <div class="page">
+        <div id="error" class="error hidden" role="alert"></div>
+        <section id="developer" class="view">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">DEVELOPER PAYOUTS · DEMO ACCOUNT</div>
+              <h1>Your earnings, available sooner.</h1>
+              <p>See exactly what you receive before requesting an advance.</p>
+            </div>
+            <span class="account-label"
+              >N<span>Northstar Notes<small>Fictional app · USD</small></span></span
+            >
+          </div>
+          <div id="developer-content">
+            <div class="panel"><p>Loading your demo account…</p></div>
+          </div>
+        </section>
+        <section id="operations" class="view hidden">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">FINANCE OPERATIONS</div>
+              <h1>Every payout, accounted for.</h1>
+              <p>Monitor payouts, fees, risk holds, and reconciliation in one place.</p>
+            </div>
+            <button id="ops-refresh" class="button secondary">Refresh</button>
+          </div>
+          <div class="ops-context">
+            <label for="ops-run">Account / scenario</label
+            ><select id="ops-run"></select
+            ><span id="ops-scope" class="muted"></span>
+          </div>
+          <div id="operations-content">
+            <div class="panel"><p>Loading financial records…</p></div>
+          </div>
+        </section>
+        <section id="workbench" class="view hidden">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">FOLLOW THE MONEY</div>
+              <h1>Small decisions. Real consequences.</h1>
+              <p>Run an advance, break a dependency, and watch the system recover.</p>
+            </div>
+            <div class="heading-actions">
+              <label class="sr-only" for="run-history">Run history</label
+              ><select id="run-history">
+                <option value="">Run history</option></select
+              ><button id="export" class="button secondary" disabled>↓ Export run</button>
+            </div>
+          </div>
+          <div class="workbench-layout">
+            <section class="panel library">
+              <div class="panel-title">
+                <h2>Scenario library</h2>
+                <span id="scenario-count" class="count">20</span>
+              </div>
+              <label class="sr-only" for="scenario-search">Search scenarios</label
+              ><input id="scenario-search" placeholder="Search scenarios…" type="search" />
+              <div class="filter-row" id="filters"></div>
+              <div id="scenario-list" class="scenario-list"></div>
+            </section>
+            <div class="workspace">
+              <section class="panel runner">
+                <div class="runner-top">
+                  <div>
+                    <div id="scenario-category" class="eyebrow">RECOVERY</div>
+                    <h2 id="scenario-title">Paid, but the response vanished</h2>
+                  </div>
+                  <span id="run-status" class="pill neutral">READY TO EXPLORE</span>
+                </div>
+                <p id="scenario-description"></p>
+                <div class="runner-controls">
+                  <button id="start" class="button primary">Start scenario <span>↗</span></button
+                  ><button id="next" class="button secondary" disabled>Next step →</button
+                  ><button id="run-all" class="text-button" disabled>Run remaining steps</button
+                  ><span id="progress-label" class="muted">No run started</span>
+                </div>
+                <div id="step-track" class="step-track"></div>
+              </section>
+              <div id="metrics" class="metrics"></div>
+              <section class="panel flow-panel">
+                <div class="panel-title">
+                  <h2>Connected workflow</h2>
+                  <span class="muted">Click a component to inspect its evidence</span>
+                </div>
+                <div id="flow" class="flow"></div>
+              </section>
+              <section class="panel evidence">
+                <div class="tabs" role="tablist" aria-label="Run evidence">
+                  <button role="tab" data-tab="timeline" class="selected" aria-selected="true">
+                    Timeline</button
+                  ><button role="tab" data-tab="decision" aria-selected="false">
+                    Decision & risk</button
+                  ><button role="tab" data-tab="bank" aria-selected="false">Bank & outbox</button
+                  ><button role="tab" data-tab="ledger" aria-selected="false">Ledger</button
+                  ><button role="tab" data-tab="reconciliation" aria-selected="false">
+                    Reconciliation
+                  </button>
+                </div>
+                <div id="evidence-body" role="tabpanel"></div>
+              </section>
+            </div>
+          </div>
+          <div class="footnote">
+            All payments use synthetic USD. Risk thresholds are illustrative. Each run has isolated
+            PostgreSQL data; the bank commits independently.
+          </div>
+        </section>
+        <section id="dataset" class="view hidden">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">FROM OBSERVATION TO SIMULATION</div>
+              <h1>A real dataset. An explicit boundary.</h1>
+              <p>Explore historical sales and cancellations, then replay a day through the lab.</p>
+            </div>
+          </div>
+          <div id="dataset-summary" class="metrics"></div>
+          <section class="panel dataset-chart">
+            <div class="panel-title">
+              <div>
+                <h2>Daily retail activity</h2>
+                <p class="muted">Original GBP values · click a bar to select an observed day</p>
+              </div>
+              <span class="chart-key"
+                ><i></i> Gross sales <i class="cancel"></i> Cancellations</span
+              >
+            </div>
+            <div id="chart" class="chart"></div>
+            <div class="chart-axis">
+              <span>DEC 2010</span><span>APR 2011</span><span>AUG 2011</span><span>DEC 2011</span>
+            </div>
+          </section>
+          <div class="dataset-grid">
+            <section class="panel">
+              <h2>Choose a day to replay</h2>
+              <label for="dataset-date">Observed invoice date</label
+              ><select id="dataset-date"></select>
+              <div id="selected-day"></div>
+              <button id="replay-data" class="button primary">Replay this day →</button>
+            </section>
+            <section class="panel">
+              <h2>What the data can tell us</h2>
+              <p>
+                Sales and cancellations from one UK retailer. No subscription renewals, app-store
+                receivables, settlement delays, or confirmed fraud labels.
+              </p>
+              <div class="callout">
+                The lab converts GBP to simulated USD at a fixed <b>1.25 USD/GBP</b> and maps the
+                selected historical day onto a fresh demo reporting period. This is an illustrative
+                transformation, not historical FX or an actual financing decision.
+              </div>
+              <p>
+                The velocity baseline uses only the preceding seven <b>observed</b> days. Missing
+                calendar dates are not filled. Low history is visible; it is not silently treated as
+                a reliable baseline.
+              </p>
+              <div id="dataset-attribution" class="attribution"></div>
+            </section>
+          </div>
+        </section>
+        <section id="architecture" class="view hidden">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">ONE APPLICATION · CLEAR BOUNDARIES</div>
+              <h1>How the pieces talk.</h1>
+              <p>Follow the evidence from a source report to a reconciled payment.</p>
+            </div>
+          </div>
+          <section class="panel architecture-map">
+            <div class="architecture-lane">
+              <article>
+                <span>01 / SOURCE</span>
+                <h2>Reports & replay</h2>
+                <p>
+                  Synthetic store snapshots or attributed UCI daily aggregates. Coverage is distinct
+                  from download time.
+                </p>
+                <small>IMPLEMENTED · ADAPTER</small>
+              </article>
+              <b>→</b>
+              <article>
+                <span>02 / DECIDE</span>
+                <h2>Eligibility & monitoring</h2>
+                <p>
+                  Integer money, capacity checks, stale-report holds, cancellation and velocity
+                  rules with visible reasons.
+                </p>
+                <small>IMPLEMENTED · ILLUSTRATIVE RULES</small>
+              </article>
+              <b>→</b>
+              <article>
+                <span>03 / RESERVE</span>
+                <h2>Advance orchestrator</h2>
+                <p>
+                  PostgreSQL transactions reserve borrower capacity and funding cash, freeze the
+                  command, and write an outbox.
+                </p>
+                <small>IMPLEMENTED · POSTGRESQL</small>
+              </article>
+            </div>
+            <div class="architecture-lane">
+              <article>
+                <span>06 / VERIFY</span>
+                <h2>Ledger & reconciliation</h2>
+                <p>
+                  Balanced funding journals, bank debit matching, and a bounded final collection
+                  allocation. Exceptions stay visible.
+                </p>
+                <small>IMPLEMENTED · BOUNDED SCOPE</small>
+              </article>
+              <b>←</b>
+              <article>
+                <span>05 / OBSERVE</span>
+                <h2>Simulated bank</h2>
+                <p>
+                  Independent transactions and real loopback HTTP. Can pay, reject, lose a response,
+                  or return an existing result.
+                </p>
+                <small>IMPLEMENTED · SYNTHETIC CASH</small>
+              </article>
+              <b>←</b>
+              <article>
+                <span>04 / EXECUTE</span>
+                <h2>Dispatch & recovery</h2>
+                <p>
+                  Leased workers call the bank after commit. Recovery queries the same identity;
+                  holds forbid resubmission.
+                </p>
+                <small>IMPLEMENTED · DURABLE INTENT</small>
+              </article>
+            </div>
+          </section>
+          <div class="dataset-grid">
+            <section class="panel">
+              <h2>The invariants we defend</h2>
+              <ul>
+                <li>One request identity binds one immutable payment command.</li>
+                <li>Unknown bank outcomes keep their reservations.</li>
+                <li>A hold prevents recovery from submitting a new bank request.</li>
+                <li>Repayment never recycles already-funded earnings.</li>
+                <li>Every posted journal balances; history is append-only.</li>
+                <li>A discrepancy opens an exception, not an invented adjustment.</li>
+              </ul>
+            </section>
+            <section class="panel">
+              <h2>Where this prototype stops</h2>
+              <p>
+                The broader architecture documents real provider integrations, fraud models,
+                returns, multi-currency, partial and aggregated collections, residual payouts,
+                authentication, and deployment controls. Those are not implemented here.
+              </p>
+              <p>
+                The dashboard's worker-stop scenario interrupts execution in-process. The
+                integration suite separately tests an actual child-JVM halt. Opening balances are
+                fixtures, not a full opening general ledger.
+              </p>
+              <span class="pill neutral">LOCAL WALKTHROUGH · NOT A PUBLIC BANKING SERVICE</span>
+            </section>
+          </div>
+        </section>
+      </div>
+    </main>
+    <div id="busy-status" class="sr-only" role="status" aria-live="polite"></div>
+  </body>
+</html>

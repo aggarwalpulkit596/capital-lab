@@ -70,16 +70,16 @@ These are example operational postings, not a conclusion about RevenueCat's acco
 
 ### Happy path: $1,000 proceeds, $800 principal, $20 fee
 
-| Step and evidence | Debit | Credit | Operational effect |
-| --- | --- | --- | --- |
-| Reservation committed | No posted journal | No posted journal | Reserve $800 principal and $780 cash; reserve rail costs separately |
-| Bank funding debit posted | Advance payout in transit $780 | Funding cash $780 | Replace cash reservation with posted cash movement |
-| Funding confirmed under provider-specific settlement rule | Advance principal receivable $800 | Advance payout in transit $780; deferred fee $20 | Move R to O and increment F by $800 |
-| Fee earned under example finance policy | Deferred fee $20 | Fee revenue $20 | Recognition timing is independent from cash movement |
-| Store collection cash posted | Collection cash $1,000 | Unapplied collections $1,000 | Do not allocate until settlement identity is established |
-| Store receipt and financial report matched | Unapplied collections $1,000 | Advance principal receivable $800; developer payable $200 | Repay principal and close eligible receivables in same transaction |
-| Residual payout bank debit | Developer-residual payout in transit $200 | Collection cash $200 | Preserve developer liability until confirmed paid |
-| Residual payout confirmed | Developer payable $200 | Developer-residual payout in transit $200 | Close residual obligation |
+| Step and evidence                                         | Debit                                     | Credit                                                    | Operational effect                                                  |
+| --------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------- |
+| Reservation committed                                     | No posted journal                         | No posted journal                                         | Reserve $800 principal and $780 cash; reserve rail costs separately |
+| Bank funding debit posted                                 | Advance payout in transit $780            | Funding cash $780                                         | Replace cash reservation with posted cash movement                  |
+| Funding confirmed under provider-specific settlement rule | Advance principal receivable $800         | Advance payout in transit $780; deferred fee $20          | Move R to O and increment F by $800                                 |
+| Fee earned under example finance policy                   | Deferred fee $20                          | Fee revenue $20                                           | Recognition timing is independent from cash movement                |
+| Store collection cash posted                              | Collection cash $1,000                    | Unapplied collections $1,000                              | Do not allocate until settlement identity is established            |
+| Store receipt and financial report matched                | Unapplied collections $1,000              | Advance principal receivable $800; developer payable $200 | Repay principal and close eligible receivables in same transaction  |
+| Residual payout bank debit                                | Developer-residual payout in transit $200 | Collection cash $200                                      | Preserve developer liability until confirmed paid                   |
+| Residual payout confirmed                                 | Developer payable $200                    | Developer-residual payout in transit $200                 | Close residual obligation                                           |
 
 The developer receives $780 early plus $200 later: $980 total. The $20 fee is not charged again on collection. Our funding cash decreased by $780; collection cash retains $800 of recovered principal. An authorized internal sweep can transfer that $800 back to funding cash with its own bank operation and balanced posting. Recovered money is not available in the funding account before that sweep is confirmed or the account arrangement otherwise permits its use.
 
@@ -87,16 +87,16 @@ If provider debit and settlement arrive together, the posting engine can produce
 
 ### Returns, shortfalls, and corrections
 
-| Situation | Required treatment |
-| --- | --- |
-| Definite rejection before debit | Release reservations; no funding journal |
-| Timeout with unknown bank result | Keep exposure/cash encumbrance unless a confirmed debit has already replaced the cash encumbrance; recover same operation |
-| Return cash before a funding asset was booked | Debit funding cash and credit advance payout in transit for returned cash; release principal reservation only once outcome is established |
-| Returned funded disbursement, before any repayments, with fee voided by example terms | Reverse original funding/fee postings using new journals linked to originals; record return cash as a distinct fact; reduce O and voided portion of F atomically |
-| Return after repayments, residual releases, or changed fee treatment | Quarantine automatic reversal; compute an approved allocation against current receivable/payable balances so no already-repaid asset becomes negative |
+| Situation                                                                              | Required treatment                                                                                                                                                      |
+| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Definite rejection before debit                                                        | Release reservations; no funding journal                                                                                                                                |
+| Timeout with unknown bank result                                                       | Keep exposure/cash encumbrance unless a confirmed debit has already replaced the cash encumbrance; recover same operation                                               |
+| Return cash before a funding asset was booked                                          | Debit funding cash and credit advance payout in transit for returned cash; release principal reservation only once outcome is established                               |
+| Returned funded disbursement, before any repayments, with fee voided by example terms  | Reverse original funding/fee postings using new journals linked to originals; record return cash as a distinct fact; reduce O and voided portion of F atomically        |
+| Return after repayments, residual releases, or changed fee treatment                   | Quarantine automatic reversal; compute an approved allocation against current receivable/payable balances so no already-repaid asset becomes negative                   |
 | Store pays $700 against $800 outstanding and no further collectible receivable remains | Allocate $700 principal; leave $100 principal outstanding, no developer residual; open recovery/shortfall case and close that settled earnings pool for new origination |
-| Store reports $1,000 but bank credits $995 | Open a $5 mismatch; do not invent a fee. Allocate only amounts whose source and purpose are supported; keep unresolved remainder classified |
-| Posted accounting error | Append an approved reversal/adjustment with original journal reference; never overwrite posted entries |
+| Store reports $1,000 but bank credits $995                                             | Open a $5 mismatch; do not invent a fee. Allocate only amounts whose source and purpose are supported; keep unresolved remainder classified                             |
+| Posted accounting error                                                                | Append an approved reversal/adjustment with original journal reference; never overwrite posted entries                                                                  |
 
 Late partial returns require amount-based remaining balances and separate linked facts, not reversal of an entire transfer by assumption. Loss write-offs are approved financial events; they must not make the original earnings eligible again. Whether a shortfall is collectible from the developer is a contract question.
 

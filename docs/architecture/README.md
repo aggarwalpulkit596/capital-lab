@@ -4,26 +4,26 @@ Status: reference design, 19 September 2026. This is a learning and interview ar
 
 ## Reading order
 
-| Document | Questions answered |
-| --- | --- |
-| [HLD](HLD.md) | Where does each component live? How do requests, events, and cash move? What do we build first? |
-| [Underwriting and risk monitoring](underwriting-risk.md) | Who qualifies, how are limits determined, and what changes after approval? |
-| [Fraud detection](fraud.md) | Which abuse signals can we actually observe, and how do they affect payouts? |
-| [Money movement, ledger, and reconciliation](payments-ledger-reconciliation.md) | How do we reserve capacity, pay safely, account for it, and reconcile settlement? |
-| [Partner bank integrations](bank-integrations.md) | What does the adapter promise? How are timeouts, returns, and account changes handled? |
-| [Data models and contracts](contracts-data.md) | What are the entities, invariants, APIs, events, and Kotlin module boundaries? |
-| [Operations and implementation roadmap](operations-rollout.md) | How do we deploy, observe, secure, validate, and evolve the system? What remains unknown? |
+| Document                                                                        | Questions answered                                                                              |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| [HLD](HLD.md)                                                                   | Where does each component live? How do requests, events, and cash move? What do we build first? |
+| [Underwriting and risk monitoring](underwriting-risk.md)                        | Who qualifies, how are limits determined, and what changes after approval?                      |
+| [Fraud detection](fraud.md)                                                     | Which abuse signals can we actually observe, and how do they affect payouts?                    |
+| [Money movement, ledger, and reconciliation](payments-ledger-reconciliation.md) | How do we reserve capacity, pay safely, account for it, and reconcile settlement?               |
+| [Partner bank integrations](bank-integrations.md)                               | What does the adapter promise? How are timeouts, returns, and account changes handled?          |
+| [Data models and contracts](contracts-data.md)                                  | What are the entities, invariants, APIs, events, and Kotlin module boundaries?                  |
+| [Operations and implementation roadmap](operations-rollout.md)                  | How do we deploy, observe, secure, validate, and evolve the system? What remains unknown?       |
 
 HLD means high-level design: responsibilities, deployment boundaries, and end-to-end flow. LLD means low-level design: states, interfaces, records, transaction boundaries, and algorithms. The LLD here is an implementation blueprint; SQL migrations and provider-specific request bodies remain future implementation work.
 
 ## Four areas, four different decisions
 
-| Area | Core question | Output | Does it move money? |
-| --- | --- | --- | --- |
-| Underwriting and risk monitoring | Is this business and its receivable pool eligible, and how much exposure is acceptable? | Versioned approval, limits, holds, review cases | No |
-| Fraud detection | Is this activity or destination change sufficiently suspicious to stop or review? | Allow/review/block assessment with evidence | No |
-| Money movement and reconciliation | Can this request consume capacity, what cash moved, and where does each cent belong? | Reserved request, transfer lifecycle, balanced journals, matched settlement | Orchestrates movement through the adapter |
-| Partner bank integration | How do we express and observe that movement using this provider's contracts? | Provider requests, evidence, normalized facts | Calls the provider that executes movement |
+| Area                              | Core question                                                                           | Output                                                                      | Does it move money?                       |
+| --------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------------------------------------- |
+| Underwriting and risk monitoring  | Is this business and its receivable pool eligible, and how much exposure is acceptable? | Versioned approval, limits, holds, review cases                             | No                                        |
+| Fraud detection                   | Is this activity or destination change sufficiently suspicious to stop or review?       | Allow/review/block assessment with evidence                                 | No                                        |
+| Money movement and reconciliation | Can this request consume capacity, what cash moved, and where does each cent belong?    | Reserved request, transfer lifecycle, balanced journals, matched settlement | Orchestrates movement through the adapter |
+| Partner bank integration          | How do we express and observe that movement using this provider's contracts?            | Provider requests, evidence, normalized facts                               | Calls the provider that executes movement |
 
 The existing Kotlin `evaluate` function belongs inside underwriting's policy calculation. It is a quote, not a complete underwriter, a funds reservation, a payment instruction, or proof of settlement.
 

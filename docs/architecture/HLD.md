@@ -68,17 +68,17 @@ flowchart LR
 
 API and workers share a codebase and transactional database initially. Each module owns writes to its tables through application interfaces; database privileges constrain those writes. Ledger posting and reservation transitions share one transactional boundary. Analytics uses exported/read-only projections and cannot authorize funding. Scale ingestion independently from financial writes. A cache is never the authority for available credit or cash.
 
-| Module | Writes it owns | Primary operator |
-| --- | --- | --- |
-| Onboarding | Legal-entity status, source connection, verified destination versions, collection-route readiness | Operations with partner-bank processes |
-| Ingestion | Immutable source batches and normalized revisions | Platform/backend engineering |
-| Receivables | Pool lifecycle, eligible estimates, settlement coverage | Capital backend + finance operations |
-| Underwriting/risk | Policy versions, assessments, borrower limits, review cases | Risk owner with engineering |
-| Fraud | Signal records, decisions, scoped holds | Risk/fraud operations |
-| Advance orchestration | Quotes, idempotent requests, reservations, authorization versions | Capital backend |
-| Payments | Payment orders, attempts, normalized lifecycle | Payments engineering |
-| Ledger | Accounts, balanced journals, immutable entries | Finance defines posting rules; engineering enforces them |
-| Reconciliation | Bank facts, matches, settlement allocations, breaks | Finance operations |
+| Module                | Writes it owns                                                                                    | Primary operator                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Onboarding            | Legal-entity status, source connection, verified destination versions, collection-route readiness | Operations with partner-bank processes                   |
+| Ingestion             | Immutable source batches and normalized revisions                                                 | Platform/backend engineering                             |
+| Receivables           | Pool lifecycle, eligible estimates, settlement coverage                                           | Capital backend + finance operations                     |
+| Underwriting/risk     | Policy versions, assessments, borrower limits, review cases                                       | Risk owner with engineering                              |
+| Fraud                 | Signal records, decisions, scoped holds                                                           | Risk/fraud operations                                    |
+| Advance orchestration | Quotes, idempotent requests, reservations, authorization versions                                 | Capital backend                                          |
+| Payments              | Payment orders, attempts, normalized lifecycle                                                    | Payments engineering                                     |
+| Ledger                | Accounts, balanced journals, immutable entries                                                    | Finance defines posting rules; engineering enforces them |
+| Reconciliation        | Bank facts, matches, settlement allocations, breaks                                               | Finance operations                                       |
 
 These are responsibilities, not ten separate teams or microservices.
 
@@ -128,14 +128,14 @@ The database transaction never spans a bank network call. The outbox closes the 
 
 ## Timing and data authority
 
-| Information | Authority | Freshness approach |
-| --- | --- | --- |
-| App purchase or refund state | Verified store data, or trusted subscription-platform projection with provenance | Notifications plus backfill/current-state checks |
-| Expected net proceeds | Versioned report-derived receivable estimate | Reporting calendar and lateness budget, not download age alone |
-| Credit availability | Committed core reservations + outstanding exposure + current policy | Synchronous, lock-protected |
-| Bank cash movement | Provider/bank posted transaction evidence | Callbacks plus independent feeds and reconciliation |
-| What we owe or are owed | Posted journals and approved allocation rules | Atomic posting; reconcile external evidence |
-| Final store settlement | Store financial report plus the attributed bank receipt | Period close with adjustments and exception cases |
+| Information                  | Authority                                                                        | Freshness approach                                             |
+| ---------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| App purchase or refund state | Verified store data, or trusted subscription-platform projection with provenance | Notifications plus backfill/current-state checks               |
+| Expected net proceeds        | Versioned report-derived receivable estimate                                     | Reporting calendar and lateness budget, not download age alone |
+| Credit availability          | Committed core reservations + outstanding exposure + current policy              | Synchronous, lock-protected                                    |
+| Bank cash movement           | Provider/bank posted transaction evidence                                        | Callbacks plus independent feeds and reconciliation            |
+| What we owe or are owed      | Posted journals and approved allocation rules                                    | Atomic posting; reconcile external evidence                    |
+| Final store settlement       | Store financial report plus the attributed bank receipt                          | Period close with adjustments and exception cases              |
 
 Apple publishes daily reports on a next-day schedule and distinguishes estimates from final proceeds. This motivates separate source coverage, download time, and settlement status. [Apple reporting schedule](https://developer.apple.com/help/app-store-connect/reference/reporting/sales-and-trends-reports-availability), [Apple reports](https://developer.apple.com/help/app-store-connect/measure-app-performance/download-and-view-reports)
 

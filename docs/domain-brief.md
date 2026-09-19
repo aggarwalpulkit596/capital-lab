@@ -76,12 +76,12 @@ Fee convention implemented for the demo: 2.5% of the newly quoted principal, rou
 
 Assume fresh data and a $2,000 exposure ceiling throughout.
 
-| Scenario | Net proceeds | Existing exposure | Effective limit | Additional capacity | Excess exposure |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| New pool | $1,000 | $0 | $800 | $800 | $0 |
-| Already partly advanced | $1,000 | $600 | $800 | $200 | $0 |
-| Refund adjustment of $250 | $750 | $600 | $600 | $0 | $0 |
-| Refund adjustment of $300 | $700 | $600 | $560 | $0 | $40 |
+| Scenario                  | Net proceeds | Existing exposure | Effective limit | Additional capacity | Excess exposure |
+| ------------------------- | -----------: | ----------------: | --------------: | ------------------: | --------------: |
+| New pool                  |       $1,000 |                $0 |            $800 |                $800 |              $0 |
+| Already partly advanced   |       $1,000 |              $600 |            $800 |                $200 |              $0 |
+| Refund adjustment of $250 |         $750 |              $600 |            $600 |                  $0 |              $0 |
+| Refund adjustment of $300 |         $700 |              $600 |            $560 |                  $0 |             $40 |
 
 On the $200 additional advance, the example fee is $5 and net cash is $195.
 

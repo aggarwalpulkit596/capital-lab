@@ -47,37 +47,37 @@ Zero or many bank transactions may correspond to an operation; a return is separ
 
 All records have stable IDs, created timestamps, and tenant/legal-entity scope where applicable. Monetary records include currency and minor-unit amounts. Store raw evidence separately with encrypted references and content hashes. Apply database-enforced tenant-scoped foreign keys so an ID from another tenant cannot be joined accidentally.
 
-| Record | Important fields | Constraint or invariant |
-| --- | --- | --- |
-| `developer_control` | tenant/developer, onboarding status, risk_epoch, destination_epoch, source_epoch, row_version | One authoritative coordination row per developer |
-| `source_connection` | developer, store/account ref, permissions, status, secret ref | Only active authorized sources feed eligibility |
-| `source_batch` | source, logical period, source revision, hash, received_at, raw_ref | Unique revision/hash; coverage is separate from received_at |
-| `economic_lot` | source transaction/aggregate identity, pool, currency, revision lineage | A receivable cannot belong to two financing pools |
-| `receivable_pool` | developer/store/account/period/currency, lifecycle, latest_revision, settled_minor, funded_lifetime_minor, outstanding_minor, reserved_minor | Natural identity unique; CLOSED pools cannot originate |
-| `pool_revision` | pool, revision, net_total_minor, coverage, data quality, source refs | Immutable versions; late revisions do not delete prior decisions |
-| `feature_snapshot` | developer, feature/schema versions, cutoff, source watermarks, values, missingness | Reproducible point-in-time inputs |
-| `risk_assessment` | limits, rate, reasons, policy/version, features, validity, reviewer | Publish only against current relevant source/risk versions |
-| `fraud_assessment` | scope, action, evidence, policy/model version, expiry | Required current assessment before reserve/dispatch |
-| `risk_hold` | scope, source, reason, case, active_from/until, resolution | Independent hold ownership; case resolution clears its own holds |
-| `budget_control` | funding/portfolio/store scope, currency, approved amount, reserved/used, version | Locked for every consuming/releasing operation |
-| `payout_destination` | owner, version, provider token, verification state, allowed purpose | Immutable referenced version; no raw credentials in payment orders |
-| `quote` | max principal, fee, expires_at, versions, accepted terms | Advisory; every request is revalidated |
-| `idempotency_request` | tenant, operation type, key, payload hash, operation/result ref | Unique scope/key; immutable payload binding |
-| `advance` | principal, fee, net cash, status, policy and decision refs, destination version | Principal = fee + net cash under this fee model |
-| `advance_allocation` | advance, pool, reserved/funded/outstanding amounts, version | Allocation sums equal parent obligation; no negative amounts |
-| `payment_order` | purpose, source/destination refs, provider key, frozen payload hash, lifecycle, amount | Unique internal business intent and provider operation key |
-| `dispatch_attempt` | order, attempt, lease/fence, request hash, observed result, timing | All retries reference the same frozen provider operation |
-| `provider_observation` | provider/event/resource IDs, kind, event/received time, raw evidence | Immutable source facts; dedup scoped to provider/environment |
-| `bank_transaction` | provider/account/transaction ID, signed amount, currency, booking date, transfer ref | Unique external cash movement; immutable corrected through new facts |
-| `collection_receipt` | bank transaction, allocated/unallocated amounts, source match state | Allocations cannot exceed confirmed available receipt |
-| `receipt_allocation` | receipt, pool, amount, version, source report refs | Consumes settled receivables and moves financial balances atomically |
-| `principal_allocation` | receipt allocation, advance allocation, amount | Cannot repay more than current principal outstanding |
-| `developer_obligation` | origin, owner, currency, payable, reserved_for_payment, paid | Residual releases cannot exceed unreserved payable |
-| `ledger_account` | legal entity, developer/control scope, type, currency | Explicit ownership and currency |
-| `journal` / `ledger_entry` | posting key, event refs, account, side, amount, reversal_of | Unique posting role; positive entries; equal debits/credits per currency |
-| `inbox` | consumer, event identity, evidence, processing result | Unique consumer/event and atomic domain processing marker |
-| `outbox` | event ID, aggregate/version, type/schema, payload, publish state | Inserted with domain commit; relay may redeliver |
-| `review_case` / `reconciliation_case` | scope, evidence, assigned owner, age, disposition | Resolution through authorized commands and evidence |
+| Record                                | Important fields                                                                                                                             | Constraint or invariant                                                  |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `developer_control`                   | tenant/developer, onboarding status, risk_epoch, destination_epoch, source_epoch, row_version                                                | One authoritative coordination row per developer                         |
+| `source_connection`                   | developer, store/account ref, permissions, status, secret ref                                                                                | Only active authorized sources feed eligibility                          |
+| `source_batch`                        | source, logical period, source revision, hash, received_at, raw_ref                                                                          | Unique revision/hash; coverage is separate from received_at              |
+| `economic_lot`                        | source transaction/aggregate identity, pool, currency, revision lineage                                                                      | A receivable cannot belong to two financing pools                        |
+| `receivable_pool`                     | developer/store/account/period/currency, lifecycle, latest_revision, settled_minor, funded_lifetime_minor, outstanding_minor, reserved_minor | Natural identity unique; CLOSED pools cannot originate                   |
+| `pool_revision`                       | pool, revision, net_total_minor, coverage, data quality, source refs                                                                         | Immutable versions; late revisions do not delete prior decisions         |
+| `feature_snapshot`                    | developer, feature/schema versions, cutoff, source watermarks, values, missingness                                                           | Reproducible point-in-time inputs                                        |
+| `risk_assessment`                     | limits, rate, reasons, policy/version, features, validity, reviewer                                                                          | Publish only against current relevant source/risk versions               |
+| `fraud_assessment`                    | scope, action, evidence, policy/model version, expiry                                                                                        | Required current assessment before reserve/dispatch                      |
+| `risk_hold`                           | scope, source, reason, case, active_from/until, resolution                                                                                   | Independent hold ownership; case resolution clears its own holds         |
+| `budget_control`                      | funding/portfolio/store scope, currency, approved amount, reserved/used, version                                                             | Locked for every consuming/releasing operation                           |
+| `payout_destination`                  | owner, version, provider token, verification state, allowed purpose                                                                          | Immutable referenced version; no raw credentials in payment orders       |
+| `quote`                               | max principal, fee, expires_at, versions, accepted terms                                                                                     | Advisory; every request is revalidated                                   |
+| `idempotency_request`                 | tenant, operation type, key, payload hash, operation/result ref                                                                              | Unique scope/key; immutable payload binding                              |
+| `advance`                             | principal, fee, net cash, status, policy and decision refs, destination version                                                              | Principal = fee + net cash under this fee model                          |
+| `advance_allocation`                  | advance, pool, reserved/funded/outstanding amounts, version                                                                                  | Allocation sums equal parent obligation; no negative amounts             |
+| `payment_order`                       | purpose, source/destination refs, provider key, frozen payload hash, lifecycle, amount                                                       | Unique internal business intent and provider operation key               |
+| `dispatch_attempt`                    | order, attempt, lease/fence, request hash, observed result, timing                                                                           | All retries reference the same frozen provider operation                 |
+| `provider_observation`                | provider/event/resource IDs, kind, event/received time, raw evidence                                                                         | Immutable source facts; dedup scoped to provider/environment             |
+| `bank_transaction`                    | provider/account/transaction ID, signed amount, currency, booking date, transfer ref                                                         | Unique external cash movement; immutable corrected through new facts     |
+| `collection_receipt`                  | bank transaction, allocated/unallocated amounts, source match state                                                                          | Allocations cannot exceed confirmed available receipt                    |
+| `receipt_allocation`                  | receipt, pool, amount, version, source report refs                                                                                           | Consumes settled receivables and moves financial balances atomically     |
+| `principal_allocation`                | receipt allocation, advance allocation, amount                                                                                               | Cannot repay more than current principal outstanding                     |
+| `developer_obligation`                | origin, owner, currency, payable, reserved_for_payment, paid                                                                                 | Residual releases cannot exceed unreserved payable                       |
+| `ledger_account`                      | legal entity, developer/control scope, type, currency                                                                                        | Explicit ownership and currency                                          |
+| `journal` / `ledger_entry`            | posting key, event refs, account, side, amount, reversal_of                                                                                  | Unique posting role; positive entries; equal debits/credits per currency |
+| `inbox`                               | consumer, event identity, evidence, processing result                                                                                        | Unique consumer/event and atomic domain processing marker                |
+| `outbox`                              | event ID, aggregate/version, type/schema, payload, publish state                                                                             | Inserted with domain commit; relay may redeliver                         |
+| `review_case` / `reconciliation_case` | scope, evidence, assigned owner, age, disposition                                                                                            | Resolution through authorized commands and evidence                      |
 
 Mutable balances are control projections for efficient locking and must reconcile to reservations, allocations, and journals. Only domain transactions may modify them. An immutable journal is the audit basis; immutable policy decisions are the decision basis. Do not treat an event bus as the authoritative money balance.
 
@@ -106,16 +106,16 @@ Deliver at least once. Consumers deduplicate within their commit transaction. Ag
 
 ## External application API
 
-| Endpoint | Purpose | Important behavior |
-| --- | --- | --- |
-| `POST /v1/advance-quotes` | Get eligible principal, fee, reasons, expiry | No reservation or payment |
-| `POST /v1/advances` | Request a principal amount | Idempotency required; 202 means durable processing accepted |
-| `GET /v1/advances/{id}` | Read state and economic amounts | Tenant authorization; distinguish queued, unknown, paid, and returned |
-| `GET /v1/statements` | Read financial statements | Derived from posted journals and attributable evidence |
-| `POST /v1/payout-destinations` | Start destination verification | Step-up authorization; creates a new version |
-| `POST /internal/cases/{id}/resolve` | Authorized operator action | Expected case version, reason, evidence, required approvals |
-| `POST /webhooks/bank/{provider}` | Receive bank evidence | Provider authentication + durable inbox, then acknowledge |
-| `POST /webhooks/stores/{source}` | Receive store notifications | Source authentication, tenant binding, durable inbox |
+| Endpoint                            | Purpose                                      | Important behavior                                                    |
+| ----------------------------------- | -------------------------------------------- | --------------------------------------------------------------------- |
+| `POST /v1/advance-quotes`           | Get eligible principal, fee, reasons, expiry | No reservation or payment                                             |
+| `POST /v1/advances`                 | Request a principal amount                   | Idempotency required; 202 means durable processing accepted           |
+| `GET /v1/advances/{id}`             | Read state and economic amounts              | Tenant authorization; distinguish queued, unknown, paid, and returned |
+| `GET /v1/statements`                | Read financial statements                    | Derived from posted journals and attributable evidence                |
+| `POST /v1/payout-destinations`      | Start destination verification               | Step-up authorization; creates a new version                          |
+| `POST /internal/cases/{id}/resolve` | Authorized operator action                   | Expected case version, reason, evidence, required approvals           |
+| `POST /webhooks/bank/{provider}`    | Receive bank evidence                        | Provider authentication + durable inbox, then acknowledge             |
+| `POST /webhooks/stores/{source}`    | Receive store notifications                  | Source authentication, tenant binding, durable inbox                  |
 
 Example advance request, representing the calculation discussed in the session:
 

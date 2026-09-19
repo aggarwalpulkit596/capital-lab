@@ -10,16 +10,16 @@ The risk is not simply whether an app will retain subscribers. For earned receiv
 
 ## Inputs and data quality
 
-| Input | Use | Missing-data behavior |
-| --- | --- | --- |
-| Business onboarding, authorized signers, partner status | Eligibility and identity | Incomplete onboarding prevents funding |
-| Store connection and evidence of app/account control | Provenance and access | Hold new funding if authority cannot be established |
-| Collection route and applicable agreement | Ability to receive/allocate settlement | Hold until operationally confirmed |
-| Historical proceeds, adjustments, refund/void patterns | Stability and estimate uncertainty | Insufficient history routes to manual review |
-| Final reports versus earlier estimates | Estimate error and loss calibration | Use conservative policy while history develops |
-| Outstanding advances, reservations, prior settlements | Current exposure and origination capacity | Read authoritative core state, never an analytics cache |
-| Fraud assessment, payout-account changes, access anomalies | Scoped hold or review | Missing/expired required assessment prevents dispatch |
-| Borrower, store, currency, partner, and funding-facility limits | Concentration and liquidity constraints | Exceeded budget prevents new reservation |
+| Input                                                           | Use                                       | Missing-data behavior                                   |
+| --------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------- |
+| Business onboarding, authorized signers, partner status         | Eligibility and identity                  | Incomplete onboarding prevents funding                  |
+| Store connection and evidence of app/account control            | Provenance and access                     | Hold new funding if authority cannot be established     |
+| Collection route and applicable agreement                       | Ability to receive/allocate settlement    | Hold until operationally confirmed                      |
+| Historical proceeds, adjustments, refund/void patterns          | Stability and estimate uncertainty        | Insufficient history routes to manual review            |
+| Final reports versus earlier estimates                          | Estimate error and loss calibration       | Use conservative policy while history develops          |
+| Outstanding advances, reservations, prior settlements           | Current exposure and origination capacity | Read authoritative core state, never an analytics cache |
+| Fraud assessment, payout-account changes, access anomalies      | Scoped hold or review                     | Missing/expired required assessment prevents dispatch   |
+| Borrower, store, currency, partner, and funding-facility limits | Concentration and liquidity constraints   | Exceeded budget prevents new reservation                |
 
 Keep a feature value, event-time cutoff, source coverage, ingestion time, transformation version, and quality flag. Unknown is not zero. Reports from different time zones are normalized without shifting economic periods accidentally. Store revisions supersede matching data; they do not add duplicate revenue.
 

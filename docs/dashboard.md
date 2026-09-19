@@ -32,16 +32,16 @@ The UI's worker interruption is an in-process failure after the bank call; a sep
 
 ## Components and boundaries
 
-| Component | Executable behavior | Scope limit |
-| --- | --- | --- |
-| Underwriting | Capacity, borrower limits, lifetime funding, stale coverage | Illustrative rules; no calibrated default model |
-| Risk and fraud review | Cancellation ratio ≥10%; revenue ≥3× previous seven observed days triggers hold | Review signals, not fraud labels; no device/KYC model |
-| Money movement | PostgreSQL reservations, DB outbox, immutable identity, leased dispatch and recovery | USD synthetic bank only |
-| Partner integration | Real loopback HTTP; separate bank transactions; lost responses and lookup | No real provider authentication or bank account |
-| Funding ledger | Balanced immutable new funding journals | Opening balances are fixtures; fee remains deferred |
-| Payment reconciliation | Match identity, currency, amount, and funding cash posting; expose exceptions | Bank simulator combines execution and settlement |
-| Collection allocation | One final report and confirmed synthetic receipt per pool; principal first, residual payable, shortfall, duplicate protection | No partial/aggregated receipts, residual bank payout, cash sweep, or full collections GL |
-| Public replay | 305 real observed retail days with attributed source and deterministic transformation | GBP retail data mapped to synthetic USD; no app-store/default/fraud labels |
+| Component              | Executable behavior                                                                                                           | Scope limit                                                                              |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Underwriting           | Capacity, borrower limits, lifetime funding, stale coverage                                                                   | Illustrative rules; no calibrated default model                                          |
+| Risk and fraud review  | Cancellation ratio ≥10%; revenue ≥3× previous seven observed days triggers hold                                               | Review signals, not fraud labels; no device/KYC model                                    |
+| Money movement         | PostgreSQL reservations, DB outbox, immutable identity, leased dispatch and recovery                                          | USD synthetic bank only                                                                  |
+| Partner integration    | Real loopback HTTP; separate bank transactions; lost responses and lookup                                                     | No real provider authentication or bank account                                          |
+| Funding ledger         | Balanced immutable new funding journals                                                                                       | Opening balances are fixtures; fee remains deferred                                      |
+| Payment reconciliation | Match identity, currency, amount, and funding cash posting; expose exceptions                                                 | Bank simulator combines execution and settlement                                         |
+| Collection allocation  | One final report and confirmed synthetic receipt per pool; principal first, residual payable, shortfall, duplicate protection | No partial/aggregated receipts, residual bank payout, cash sweep, or full collections GL |
+| Public replay          | 305 real observed retail days with attributed source and deterministic transformation                                         | GBP retail data mapped to synthetic USD; no app-store/default/fraud labels               |
 
 Collection cash is distinct from funding cash. Allocating a receipt reduces outstanding principal, closes the pool, and leaves lifetime-funded principal unchanged. A residual remains a developer liability and is not spent as company funding cash. A mismatched receipt is recorded as external evidence and remains unapplied; this bounded slice does not yet book a full unapplied-cash ledger.
 
@@ -56,8 +56,12 @@ Collection cash is distinct from funding cash. Allocating a receipt reduces outs
 
 Mutations require `Content-Type: application/json` and `X-Capital-Lab: local-demo`, plus a matching Origin when present. There is no arbitrary SQL, shell-command, external-URL, or production-provider endpoint exposed through the dashboard.
 
-Read [ScenarioLab.kt](../src/main/kotlin/capital/dashboard/ScenarioLab.kt), [Monitoring.kt](../src/main/kotlin/capital/dashboard/Monitoring.kt), [CollectionService.kt](../src/main/kotlin/capital/dashboard/CollectionService.kt), and [DashboardServer.kt](../src/main/kotlin/capital/dashboard/DashboardServer.kt).
+Read [ScenarioLab.kt](../src/main/kotlin/capital/dashboard/ScenarioLab.kt), [Monitoring.kt](../src/main/kotlin/capital/risk/Monitoring.kt), [CollectionService.kt](../src/main/kotlin/capital/collections/CollectionService.kt), and [DashboardServer.kt](../src/main/kotlin/capital/dashboard/DashboardServer.kt).
 
 ## Public release preparation
 
 Code and original documentation use [Apache 2.0](../LICENSE); public data retain [separate attribution](../data/README.md). Contribution and local-deployment notes are included. See the [source repository](https://github.com/aggarwalpulkit596/capital-lab) and [CI checks](https://github.com/aggarwalpulkit596/capital-lab/actions/workflows/check.yml). The dashboard itself remains a local application. Personal application drafts and session notes are excluded from the public repository.
+
+## Role-based workspace
+
+The home view is now **Developer payouts**: review $200 principal, the $5 fixed fee, and $195 net cash, then request the payout. **Finance operations** presents payouts, fees withheld, risk review, ledger, and reconciliation for one selected account or scenario. **Scenario workbench** retains the existing guided scenarios. Previous server sessions are available through run history as read-only evidence archives. See [engineering boundaries](engineering-reference.md) and [operations](runbook.md).

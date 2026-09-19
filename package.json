@@ -1,0 +1,19 @@
+{
+  "name": "capital-lab-tooling",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development tooling for Capital Lab; the dashboard has no runtime JavaScript dependencies.",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "prettier": "3.9.8"
+  }
+}
