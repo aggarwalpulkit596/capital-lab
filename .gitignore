@@ -1,0 +1,15 @@
+.gradle/
+.gradle-user-home/
+build/
+.idea/
+*.iml
+.DS_Store
+.kotlin/
+data/raw/
+.env
+.env.*
+!.env.example
+node_modules/
+# Personal application drafts stay local when the public repository is created.
+docs/q5-draft.md
+docs/session-log.md

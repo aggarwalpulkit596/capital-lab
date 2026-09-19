@@ -1,0 +1,21 @@
+name: Check
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - name: Check browser JavaScript syntax
+        run: node --check src/main/resources/dashboard/app.js
+      - name: Test calculator, dashboard, PostgreSQL, and bank recovery
+        run: ./gradlew --no-daemon check

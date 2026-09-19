@@ -1,0 +1,22 @@
+Capital Lab
+Copyright 2026 Capital Lab contributors
+
+Original project code and documentation are licensed under Apache License 2.0.
+This is an independent learning project, not a RevenueCat product or implementation.
+
+The derived daily dataset in src/main/resources/data/uci-retail-daily.json is
+separately licensed under Creative Commons Attribution 4.0 International.
+
+Source: Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository.
+https://doi.org/10.24432/C5BW33
+https://archive.ics.uci.edu/dataset/352/online+retail
+License: https://creativecommons.org/licenses/by/4.0/
+
+Changes: transaction lines aggregated by invoice date; nonpositive prices and
+zero quantities excluded; cancellation classification based on invoice prefix
+or negative quantity; extended line amounts rounded half-up to GBP pence;
+customer identifiers and descriptions omitted. Source hashes and full
+transformation notes are included in the derived dataset and data/README.md.
+The dashboard's fixed USD/GBP replay rate is illustrative, not historical FX.
+
+Third-party dependencies retain their respective licenses.

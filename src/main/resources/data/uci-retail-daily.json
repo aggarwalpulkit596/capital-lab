@@ -1,0 +1,2463 @@
+{
+  "title": "UCI Online Retail \u2014 daily aggregates",
+  "creator": "Daqing Chen",
+  "citation": "Chen, D. (2015). Online Retail [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33",
+  "sourceUrl": "https://archive.ics.uci.edu/dataset/352/online+retail",
+  "downloadUrl": "https://archive.ics.uci.edu/static/public/352/online%2Bretail.zip",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "sourceCurrency": "GBP",
+  "sourceRows": 541909,
+  "excludedRows": 2517,
+  "archiveSha256": "f5385cbb54bbebf7196389109c6b0621faab0c304e3702548165e71c84aede8b",
+  "workbookSha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d",
+  "transformations": [
+    "All countries aggregated by invoice date; customer IDs and descriptions omitted.",
+    "Exclude nonpositive prices and zero quantities; include rows without customer IDs.",
+    "Cancellation = invoice starts C or quantity is negative; not a fraud label.",
+    "Extended line amounts rounded half-up to GBP pence; missing calendar days are not filled.",
+    "Dashboard USD replay uses an illustrative fixed 1.25 USD/GBP, not historical FX."
+  ],
+  "days": [
+    {
+      "date": "2010-12-01",
+      "grossMinor": 5896079,
+      "cancellationsMinor": 32523,
+      "saleLines": 3072,
+      "cancellationLines": 26,
+      "netMinor": 5863556
+    },
+    {
+      "date": "2010-12-02",
+      "grossMinor": 4774838,
+      "cancellationsMinor": 154110,
+      "saleLines": 2063,
+      "cancellationLines": 44,
+      "netMinor": 4620728
+    },
+    {
+      "date": "2010-12-03",
+      "grossMinor": 4694371,
+      "cancellationsMinor": 132325,
+      "saleLines": 2155,
+      "cancellationLines": 14,
+      "netMinor": 4562046
+    },
+    {
+      "date": "2010-12-05",
+      "grossMinor": 3177495,
+      "cancellationsMinor": 39100,
+      "saleLines": 2708,
+      "cancellationLines": 16,
+      "netMinor": 3138395
+    },
+    {
+      "date": "2010-12-06",
+      "grossMinor": 5483046,
+      "cancellationsMinor": 97028,
+      "saleLines": 3816,
+      "cancellationLines": 49,
+      "netMinor": 5386018
+    },
+    {
+      "date": "2010-12-07",
+      "grossMinor": 9961820,
+      "cancellationsMinor": 5455915,
+      "saleLines": 2862,
+      "cancellationLines": 34,
+      "netMinor": 4505905
+    },
+    {
+      "date": "2010-12-08",
+      "grossMinor": 4538998,
+      "cancellationsMinor": 120014,
+      "saleLines": 2565,
+      "cancellationLines": 73,
+      "netMinor": 4418984
+    },
+    {
+      "date": "2010-12-09",
+      "grossMinor": 5358618,
+      "cancellationsMinor": 105405,
+      "saleLines": 2775,
+      "cancellationLines": 73,
+      "netMinor": 5253213
+    },
+    {
+      "date": "2010-12-10",
+      "grossMinor": 5918292,
+      "cancellationsMinor": 177801,
+      "saleLines": 2681,
+      "cancellationLines": 70,
+      "netMinor": 5740491
+    },
+    {
+      "date": "2010-12-12",
+      "grossMinor": 1732907,
+      "cancellationsMinor": 8815,
+      "saleLines": 1439,
+      "cancellationLines": 12,
+      "netMinor": 1724092
+    },
+    {
+      "date": "2010-12-13",
+      "grossMinor": 3800671,
+      "cancellationsMinor": 262737,
+      "saleLines": 2263,
+      "cancellationLines": 20,
+      "netMinor": 3537934
+    },
+    {
+      "date": "2010-12-14",
+      "grossMinor": 4525473,
+      "cancellationsMinor": 241144,
+      "saleLines": 2005,
+      "cancellationLines": 76,
+      "netMinor": 4284329
+    },
+    {
+      "date": "2010-12-15",
+      "grossMinor": 3044462,
+      "cancellationsMinor": 100093,
+      "saleLines": 1307,
+      "cancellationLines": 41,
+      "netMinor": 2944369
+    },
+    {
+      "date": "2010-12-16",
+      "grossMinor": 4935290,
+      "cancellationsMinor": 101855,
+      "saleLines": 1750,
+      "cancellationLines": 39,
+      "netMinor": 4833435
+    },
+    {
+      "date": "2010-12-17",
+      "grossMinor": 4541833,
+      "cancellationsMinor": 188414,
+      "saleLines": 3105,
+      "cancellationLines": 9,
+      "netMinor": 4353419
+    },
+    {
+      "date": "2010-12-19",
+      "grossMinor": 753491,
+      "cancellationsMinor": 1760,
+      "saleLines": 518,
+      "cancellationLines": 4,
+      "netMinor": 751731
+    },
+    {
+      "date": "2010-12-20",
+      "grossMinor": 2678913,
+      "cancellationsMinor": 204738,
+      "saleLines": 1671,
+      "cancellationLines": 84,
+      "netMinor": 2474175
+    },
+    {
+      "date": "2010-12-21",
+      "grossMinor": 4730409,
+      "cancellationsMinor": 20615,
+      "saleLines": 1559,
+      "cancellationLines": 21,
+      "netMinor": 4709794
+    },
+    {
+      "date": "2010-12-22",
+      "grossMinor": 619997,
+      "cancellationsMinor": 6540,
+      "saleLines": 222,
+      "cancellationLines": 5,
+      "netMinor": 613457
+    },
+    {
+      "date": "2010-12-23",
+      "grossMinor": 1207611,
+      "cancellationsMinor": 27980,
+      "saleLines": 944,
+      "cancellationLines": 18,
+      "netMinor": 1179631
+    },
+    {
+      "date": "2011-01-04",
+      "grossMinor": 1602608,
+      "cancellationsMinor": 107560,
+      "saleLines": 1156,
+      "cancellationLines": 14,
+      "netMinor": 1495048
+    },
+    {
+      "date": "2011-01-05",
+      "grossMinor": 3263447,
+      "cancellationsMinor": 3420070,
+      "saleLines": 1666,
+      "cancellationLines": 73,
+      "netMinor": -156623
+    },
+    {
+      "date": "2011-01-06",
+      "grossMinor": 4038285,
+      "cancellationsMinor": 299011,
+      "saleLines": 1765,
+      "cancellationLines": 61,
+      "netMinor": 3739274
+    },
+    {
+      "date": "2011-01-07",
+      "grossMinor": 2883659,
+      "cancellationsMinor": 160345,
+      "saleLines": 1766,
+      "cancellationLines": 28,
+      "netMinor": 2723314
+    },
+    {
+      "date": "2011-01-09",
+      "grossMinor": 1577820,
+      "cancellationsMinor": 6740,
+      "saleLines": 1098,
+      "cancellationLines": 19,
+      "netMinor": 1571080
+    },
+    {
+      "date": "2011-01-10",
+      "grossMinor": 2456907,
+      "cancellationsMinor": 37743,
+      "saleLines": 1951,
+      "cancellationLines": 8,
+      "netMinor": 2419164
+    },
+    {
+      "date": "2011-01-11",
+      "grossMinor": 6865559,
+      "cancellationsMinor": 83846,
+      "saleLines": 1395,
+      "cancellationLines": 48,
+      "netMinor": 6781713
+    },
+    {
+      "date": "2011-01-12",
+      "grossMinor": 2469378,
+      "cancellationsMinor": 73500,
+      "saleLines": 1783,
+      "cancellationLines": 23,
+      "netMinor": 2395878
+    },
+    {
+      "date": "2011-01-13",
+      "grossMinor": 2062464,
+      "cancellationsMinor": 9110,
+      "saleLines": 1433,
+      "cancellationLines": 10,
+      "netMinor": 2053354
+    },
+    {
+      "date": "2011-01-14",
+      "grossMinor": 4757690,
+      "cancellationsMinor": 19964,
+      "saleLines": 1493,
+      "cancellationLines": 17,
+      "netMinor": 4737726
+    },
+    {
+      "date": "2011-01-16",
+      "grossMinor": 724206,
+      "cancellationsMinor": 12545,
+      "saleLines": 642,
+      "cancellationLines": 4,
+      "netMinor": 711661
+    },
+    {
+      "date": "2011-01-17",
+      "grossMinor": 2933302,
+      "cancellationsMinor": 7702,
+      "saleLines": 2551,
+      "cancellationLines": 6,
+      "netMinor": 2925600
+    },
+    {
+      "date": "2011-01-18",
+      "grossMinor": 9597805,
+      "cancellationsMinor": 7729725,
+      "saleLines": 1428,
+      "cancellationLines": 17,
+      "netMinor": 1868080
+    },
+    {
+      "date": "2011-01-19",
+      "grossMinor": 2593457,
+      "cancellationsMinor": 34876,
+      "saleLines": 1407,
+      "cancellationLines": 6,
+      "netMinor": 2558581
+    },
+    {
+      "date": "2011-01-20",
+      "grossMinor": 2124699,
+      "cancellationsMinor": 325108,
+      "saleLines": 1477,
+      "cancellationLines": 22,
+      "netMinor": 1799591
+    },
+    {
+      "date": "2011-01-21",
+      "grossMinor": 3264030,
+      "cancellationsMinor": 66186,
+      "saleLines": 1532,
+      "cancellationLines": 60,
+      "netMinor": 3197844
+    },
+    {
+      "date": "2011-01-23",
+      "grossMinor": 1040025,
+      "cancellationsMinor": 11430,
+      "saleLines": 860,
+      "cancellationLines": 19,
+      "netMinor": 1028595
+    },
+    {
+      "date": "2011-01-24",
+      "grossMinor": 2573379,
+      "cancellationsMinor": 17817,
+      "saleLines": 1472,
+      "cancellationLines": 11,
+      "netMinor": 2555562
+    },
+    {
+      "date": "2011-01-25",
+      "grossMinor": 2907747,
+      "cancellationsMinor": 110595,
+      "saleLines": 1600,
+      "cancellationLines": 54,
+      "netMinor": 2797152
+    },
+    {
+      "date": "2011-01-26",
+      "grossMinor": 1992229,
+      "cancellationsMinor": 42897,
+      "saleLines": 1256,
+      "cancellationLines": 31,
+      "netMinor": 1949332
+    },
+    {
+      "date": "2011-01-27",
+      "grossMinor": 2373084,
+      "cancellationsMinor": 263870,
+      "saleLines": 1493,
+      "cancellationLines": 64,
+      "netMinor": 2109214
+    },
+    {
+      "date": "2011-01-28",
+      "grossMinor": 2009065,
+      "cancellationsMinor": 152288,
+      "saleLines": 895,
+      "cancellationLines": 62,
+      "netMinor": 1856777
+    },
+    {
+      "date": "2011-01-30",
+      "grossMinor": 661575,
+      "cancellationsMinor": 15931,
+      "saleLines": 714,
+      "cancellationLines": 8,
+      "netMinor": 645644
+    },
+    {
+      "date": "2011-01-31",
+      "grossMinor": 2364036,
+      "cancellationsMinor": 127571,
+      "saleLines": 1473,
+      "cancellationLines": 36,
+      "netMinor": 2236465
+    },
+    {
+      "date": "2011-02-01",
+      "grossMinor": 2903499,
+      "cancellationsMinor": 60177,
+      "saleLines": 1527,
+      "cancellationLines": 38,
+      "netMinor": 2843322
+    },
+    {
+      "date": "2011-02-02",
+      "grossMinor": 2121620,
+      "cancellationsMinor": 16775,
+      "saleLines": 1397,
+      "cancellationLines": 10,
+      "netMinor": 2104845
+    },
+    {
+      "date": "2011-02-03",
+      "grossMinor": 2347983,
+      "cancellationsMinor": 13525,
+      "saleLines": 978,
+      "cancellationLines": 9,
+      "netMinor": 2334458
+    },
+    {
+      "date": "2011-02-04",
+      "grossMinor": 2516219,
+      "cancellationsMinor": 16802,
+      "saleLines": 1202,
+      "cancellationLines": 13,
+      "netMinor": 2499417
+    },
+    {
+      "date": "2011-02-06",
+      "grossMinor": 345711,
+      "cancellationsMinor": 0,
+      "saleLines": 279,
+      "cancellationLines": 0,
+      "netMinor": 345711
+    },
+    {
+      "date": "2011-02-07",
+      "grossMinor": 2595501,
+      "cancellationsMinor": 42902,
+      "saleLines": 1229,
+      "cancellationLines": 30,
+      "netMinor": 2552599
+    },
+    {
+      "date": "2011-02-08",
+      "grossMinor": 2094992,
+      "cancellationsMinor": 22178,
+      "saleLines": 1198,
+      "cancellationLines": 24,
+      "netMinor": 2072814
+    },
+    {
+      "date": "2011-02-09",
+      "grossMinor": 1669258,
+      "cancellationsMinor": 0,
+      "saleLines": 877,
+      "cancellationLines": 0,
+      "netMinor": 1669258
+    },
+    {
+      "date": "2011-02-10",
+      "grossMinor": 1489646,
+      "cancellationsMinor": 146892,
+      "saleLines": 721,
+      "cancellationLines": 62,
+      "netMinor": 1342754
+    },
+    {
+      "date": "2011-02-11",
+      "grossMinor": 2287310,
+      "cancellationsMinor": 248582,
+      "saleLines": 867,
+      "cancellationLines": 84,
+      "netMinor": 2038728
+    },
+    {
+      "date": "2011-02-13",
+      "grossMinor": 571363,
+      "cancellationsMinor": 17823,
+      "saleLines": 609,
+      "cancellationLines": 15,
+      "netMinor": 553540
+    },
+    {
+      "date": "2011-02-14",
+      "grossMinor": 2670351,
+      "cancellationsMinor": 48148,
+      "saleLines": 1087,
+      "cancellationLines": 20,
+      "netMinor": 2622203
+    },
+    {
+      "date": "2011-02-15",
+      "grossMinor": 3987574,
+      "cancellationsMinor": 303316,
+      "saleLines": 1314,
+      "cancellationLines": 17,
+      "netMinor": 3684258
+    },
+    {
+      "date": "2011-02-16",
+      "grossMinor": 2494910,
+      "cancellationsMinor": 21829,
+      "saleLines": 1184,
+      "cancellationLines": 7,
+      "netMinor": 2473081
+    },
+    {
+      "date": "2011-02-17",
+      "grossMinor": 2637267,
+      "cancellationsMinor": 1080,
+      "saleLines": 1714,
+      "cancellationLines": 4,
+      "netMinor": 2636187
+    },
+    {
+      "date": "2011-02-18",
+      "grossMinor": 1620875,
+      "cancellationsMinor": 28035,
+      "saleLines": 818,
+      "cancellationLines": 27,
+      "netMinor": 1592840
+    },
+    {
+      "date": "2011-02-20",
+      "grossMinor": 962469,
+      "cancellationsMinor": 4580,
+      "saleLines": 859,
+      "cancellationLines": 5,
+      "netMinor": 957889
+    },
+    {
+      "date": "2011-02-21",
+      "grossMinor": 3638875,
+      "cancellationsMinor": 1258092,
+      "saleLines": 1376,
+      "cancellationLines": 47,
+      "netMinor": 2380783
+    },
+    {
+      "date": "2011-02-22",
+      "grossMinor": 3249835,
+      "cancellationsMinor": 20573,
+      "saleLines": 1568,
+      "cancellationLines": 24,
+      "netMinor": 3229262
+    },
+    {
+      "date": "2011-02-23",
+      "grossMinor": 2689160,
+      "cancellationsMinor": 9884,
+      "saleLines": 1571,
+      "cancellationLines": 6,
+      "netMinor": 2679276
+    },
+    {
+      "date": "2011-02-24",
+      "grossMinor": 2280984,
+      "cancellationsMinor": 15401,
+      "saleLines": 1270,
+      "cancellationLines": 22,
+      "netMinor": 2265583
+    },
+    {
+      "date": "2011-02-25",
+      "grossMinor": 2059574,
+      "cancellationsMinor": 256590,
+      "saleLines": 970,
+      "cancellationLines": 8,
+      "netMinor": 1802984
+    },
+    {
+      "date": "2011-02-27",
+      "grossMinor": 952650,
+      "cancellationsMinor": 3545,
+      "saleLines": 810,
+      "cancellationLines": 2,
+      "netMinor": 949105
+    },
+    {
+      "date": "2011-02-28",
+      "grossMinor": 2175563,
+      "cancellationsMinor": 195,
+      "saleLines": 1680,
+      "cancellationLines": 1,
+      "netMinor": 2175368
+    },
+    {
+      "date": "2011-03-01",
+      "grossMinor": 2635496,
+      "cancellationsMinor": 88325,
+      "saleLines": 1354,
+      "cancellationLines": 6,
+      "netMinor": 2547171
+    },
+    {
+      "date": "2011-03-02",
+      "grossMinor": 1869079,
+      "cancellationsMinor": 39434,
+      "saleLines": 891,
+      "cancellationLines": 42,
+      "netMinor": 1829645
+    },
+    {
+      "date": "2011-03-03",
+      "grossMinor": 3640400,
+      "cancellationsMinor": 56138,
+      "saleLines": 1337,
+      "cancellationLines": 36,
+      "netMinor": 3584262
+    },
+    {
+      "date": "2011-03-04",
+      "grossMinor": 1950680,
+      "cancellationsMinor": 3193,
+      "saleLines": 1099,
+      "cancellationLines": 3,
+      "netMinor": 1947487
+    },
+    {
+      "date": "2011-03-06",
+      "grossMinor": 1000537,
+      "cancellationsMinor": 40914,
+      "saleLines": 822,
+      "cancellationLines": 22,
+      "netMinor": 959623
+    },
+    {
+      "date": "2011-03-07",
+      "grossMinor": 3235655,
+      "cancellationsMinor": 183097,
+      "saleLines": 1907,
+      "cancellationLines": 62,
+      "netMinor": 3052558
+    },
+    {
+      "date": "2011-03-08",
+      "grossMinor": 2508162,
+      "cancellationsMinor": 6415,
+      "saleLines": 1583,
+      "cancellationLines": 7,
+      "netMinor": 2501747
+    },
+    {
+      "date": "2011-03-09",
+      "grossMinor": 2203884,
+      "cancellationsMinor": 13172,
+      "saleLines": 1242,
+      "cancellationLines": 15,
+      "netMinor": 2190712
+    },
+    {
+      "date": "2011-03-10",
+      "grossMinor": 2612022,
+      "cancellationsMinor": 52233,
+      "saleLines": 1080,
+      "cancellationLines": 45,
+      "netMinor": 2559789
+    },
+    {
+      "date": "2011-03-11",
+      "grossMinor": 2547518,
+      "cancellationsMinor": 347990,
+      "saleLines": 940,
+      "cancellationLines": 12,
+      "netMinor": 2199528
+    },
+    {
+      "date": "2011-03-13",
+      "grossMinor": 414812,
+      "cancellationsMinor": 1050,
+      "saleLines": 534,
+      "cancellationLines": 3,
+      "netMinor": 413762
+    },
+    {
+      "date": "2011-03-14",
+      "grossMinor": 2601955,
+      "cancellationsMinor": 15496,
+      "saleLines": 1091,
+      "cancellationLines": 19,
+      "netMinor": 2586459
+    },
+    {
+      "date": "2011-03-15",
+      "grossMinor": 2349349,
+      "cancellationsMinor": 283346,
+      "saleLines": 1277,
+      "cancellationLines": 11,
+      "netMinor": 2066003
+    },
+    {
+      "date": "2011-03-16",
+      "grossMinor": 2194836,
+      "cancellationsMinor": 76572,
+      "saleLines": 863,
+      "cancellationLines": 10,
+      "netMinor": 2118264
+    },
+    {
+      "date": "2011-03-17",
+      "grossMinor": 3990494,
+      "cancellationsMinor": 110069,
+      "saleLines": 2017,
+      "cancellationLines": 57,
+      "netMinor": 3880425
+    },
+    {
+      "date": "2011-03-18",
+      "grossMinor": 2817179,
+      "cancellationsMinor": 1140133,
+      "saleLines": 1309,
+      "cancellationLines": 40,
+      "netMinor": 1677046
+    },
+    {
+      "date": "2011-03-20",
+      "grossMinor": 2215349,
+      "cancellationsMinor": 17285,
+      "saleLines": 1444,
+      "cancellationLines": 9,
+      "netMinor": 2198064
+    },
+    {
+      "date": "2011-03-21",
+      "grossMinor": 1671552,
+      "cancellationsMinor": 34525,
+      "saleLines": 1040,
+      "cancellationLines": 28,
+      "netMinor": 1637027
+    },
+    {
+      "date": "2011-03-22",
+      "grossMinor": 3151558,
+      "cancellationsMinor": 20323,
+      "saleLines": 2346,
+      "cancellationLines": 12,
+      "netMinor": 3131235
+    },
+    {
+      "date": "2011-03-23",
+      "grossMinor": 2409167,
+      "cancellationsMinor": 6260,
+      "saleLines": 1287,
+      "cancellationLines": 11,
+      "netMinor": 2402907
+    },
+    {
+      "date": "2011-03-24",
+      "grossMinor": 3669714,
+      "cancellationsMinor": 13504,
+      "saleLines": 1544,
+      "cancellationLines": 15,
+      "netMinor": 3656210
+    },
+    {
+      "date": "2011-03-25",
+      "grossMinor": 3139421,
+      "cancellationsMinor": 73818,
+      "saleLines": 1340,
+      "cancellationLines": 44,
+      "netMinor": 3065603
+    },
+    {
+      "date": "2011-03-27",
+      "grossMinor": 924135,
+      "cancellationsMinor": 26137,
+      "saleLines": 715,
+      "cancellationLines": 22,
+      "netMinor": 897998
+    },
+    {
+      "date": "2011-03-28",
+      "grossMinor": 2317672,
+      "cancellationsMinor": 396969,
+      "saleLines": 1633,
+      "cancellationLines": 26,
+      "netMinor": 1920703
+    },
+    {
+      "date": "2011-03-29",
+      "grossMinor": 7071192,
+      "cancellationsMinor": 18045,
+      "saleLines": 1941,
+      "cancellationLines": 17,
+      "netMinor": 7053147
+    },
+    {
+      "date": "2011-03-30",
+      "grossMinor": 3188528,
+      "cancellationsMinor": 39603,
+      "saleLines": 1531,
+      "cancellationLines": 30,
+      "netMinor": 3148925
+    },
+    {
+      "date": "2011-03-31",
+      "grossMinor": 3433590,
+      "cancellationsMinor": 333182,
+      "saleLines": 1636,
+      "cancellationLines": 95,
+      "netMinor": 3100408
+    },
+    {
+      "date": "2011-04-01",
+      "grossMinor": 2566751,
+      "cancellationsMinor": 127573,
+      "saleLines": 1222,
+      "cancellationLines": 19,
+      "netMinor": 2439178
+    },
+    {
+      "date": "2011-04-03",
+      "grossMinor": 694315,
+      "cancellationsMinor": 6505,
+      "saleLines": 725,
+      "cancellationLines": 6,
+      "netMinor": 687810
+    },
+    {
+      "date": "2011-04-04",
+      "grossMinor": 3325424,
+      "cancellationsMinor": 818122,
+      "saleLines": 1656,
+      "cancellationLines": 42,
+      "netMinor": 2507302
+    },
+    {
+      "date": "2011-04-05",
+      "grossMinor": 3014477,
+      "cancellationsMinor": 179094,
+      "saleLines": 1135,
+      "cancellationLines": 50,
+      "netMinor": 2835383
+    },
+    {
+      "date": "2011-04-06",
+      "grossMinor": 1736236,
+      "cancellationsMinor": 8301,
+      "saleLines": 1070,
+      "cancellationLines": 8,
+      "netMinor": 1727935
+    },
+    {
+      "date": "2011-04-07",
+      "grossMinor": 1851289,
+      "cancellationsMinor": 28389,
+      "saleLines": 1500,
+      "cancellationLines": 20,
+      "netMinor": 1822900
+    },
+    {
+      "date": "2011-04-08",
+      "grossMinor": 2529564,
+      "cancellationsMinor": 199650,
+      "saleLines": 1368,
+      "cancellationLines": 18,
+      "netMinor": 2329914
+    },
+    {
+      "date": "2011-04-10",
+      "grossMinor": 991398,
+      "cancellationsMinor": 55010,
+      "saleLines": 933,
+      "cancellationLines": 7,
+      "netMinor": 936388
+    },
+    {
+      "date": "2011-04-11",
+      "grossMinor": 2235327,
+      "cancellationsMinor": 24296,
+      "saleLines": 1223,
+      "cancellationLines": 35,
+      "netMinor": 2211031
+    },
+    {
+      "date": "2011-04-12",
+      "grossMinor": 2557030,
+      "cancellationsMinor": 44605,
+      "saleLines": 1111,
+      "cancellationLines": 38,
+      "netMinor": 2512425
+    },
+    {
+      "date": "2011-04-13",
+      "grossMinor": 2448442,
+      "cancellationsMinor": 58622,
+      "saleLines": 1021,
+      "cancellationLines": 27,
+      "netMinor": 2389820
+    },
+    {
+      "date": "2011-04-14",
+      "grossMinor": 3610407,
+      "cancellationsMinor": 80849,
+      "saleLines": 1547,
+      "cancellationLines": 58,
+      "netMinor": 3529558
+    },
+    {
+      "date": "2011-04-15",
+      "grossMinor": 2833412,
+      "cancellationsMinor": 699,
+      "saleLines": 1480,
+      "cancellationLines": 3,
+      "netMinor": 2832713
+    },
+    {
+      "date": "2011-04-17",
+      "grossMinor": 1272550,
+      "cancellationsMinor": 2120,
+      "saleLines": 966,
+      "cancellationLines": 2,
+      "netMinor": 1270430
+    },
+    {
+      "date": "2011-04-18",
+      "grossMinor": 5602618,
+      "cancellationsMinor": 2384057,
+      "saleLines": 3131,
+      "cancellationLines": 74,
+      "netMinor": 3218561
+    },
+    {
+      "date": "2011-04-19",
+      "grossMinor": 2433870,
+      "cancellationsMinor": 50105,
+      "saleLines": 1860,
+      "cancellationLines": 27,
+      "netMinor": 2383765
+    },
+    {
+      "date": "2011-04-20",
+      "grossMinor": 2867047,
+      "cancellationsMinor": 43108,
+      "saleLines": 990,
+      "cancellationLines": 25,
+      "netMinor": 2823939
+    },
+    {
+      "date": "2011-04-21",
+      "grossMinor": 3261563,
+      "cancellationsMinor": 141703,
+      "saleLines": 1894,
+      "cancellationLines": 10,
+      "netMinor": 3119860
+    },
+    {
+      "date": "2011-04-26",
+      "grossMinor": 3104743,
+      "cancellationsMinor": 46189,
+      "saleLines": 1865,
+      "cancellationLines": 34,
+      "netMinor": 3058554
+    },
+    {
+      "date": "2011-04-27",
+      "grossMinor": 2594244,
+      "cancellationsMinor": 35188,
+      "saleLines": 1268,
+      "cancellationLines": 24,
+      "netMinor": 2559056
+    },
+    {
+      "date": "2011-04-28",
+      "grossMinor": 2250155,
+      "cancellationsMinor": 125965,
+      "saleLines": 1131,
+      "cancellationLines": 32,
+      "netMinor": 2124190
+    },
+    {
+      "date": "2011-05-01",
+      "grossMinor": 697366,
+      "cancellationsMinor": 900,
+      "saleLines": 448,
+      "cancellationLines": 4,
+      "netMinor": 696466
+    },
+    {
+      "date": "2011-05-03",
+      "grossMinor": 3522941,
+      "cancellationsMinor": 1561155,
+      "saleLines": 1369,
+      "cancellationLines": 38,
+      "netMinor": 1961786
+    },
+    {
+      "date": "2011-05-04",
+      "grossMinor": 2754415,
+      "cancellationsMinor": 8185,
+      "saleLines": 1143,
+      "cancellationLines": 15,
+      "netMinor": 2746230
+    },
+    {
+      "date": "2011-05-05",
+      "grossMinor": 2917429,
+      "cancellationsMinor": 42364,
+      "saleLines": 1798,
+      "cancellationLines": 37,
+      "netMinor": 2875065
+    },
+    {
+      "date": "2011-05-06",
+      "grossMinor": 3612635,
+      "cancellationsMinor": 41177,
+      "saleLines": 2007,
+      "cancellationLines": 18,
+      "netMinor": 3571458
+    },
+    {
+      "date": "2011-05-08",
+      "grossMinor": 1886740,
+      "cancellationsMinor": 5848,
+      "saleLines": 1500,
+      "cancellationLines": 6,
+      "netMinor": 1880892
+    },
+    {
+      "date": "2011-05-09",
+      "grossMinor": 2789971,
+      "cancellationsMinor": 183928,
+      "saleLines": 1750,
+      "cancellationLines": 13,
+      "netMinor": 2606043
+    },
+    {
+      "date": "2011-05-10",
+      "grossMinor": 4781998,
+      "cancellationsMinor": 225586,
+      "saleLines": 2532,
+      "cancellationLines": 53,
+      "netMinor": 4556412
+    },
+    {
+      "date": "2011-05-11",
+      "grossMinor": 3368725,
+      "cancellationsMinor": 44689,
+      "saleLines": 1662,
+      "cancellationLines": 34,
+      "netMinor": 3324036
+    },
+    {
+      "date": "2011-05-12",
+      "grossMinor": 6190309,
+      "cancellationsMinor": 199112,
+      "saleLines": 1927,
+      "cancellationLines": 36,
+      "netMinor": 5991197
+    },
+    {
+      "date": "2011-05-13",
+      "grossMinor": 3074995,
+      "cancellationsMinor": 588,
+      "saleLines": 1418,
+      "cancellationLines": 4,
+      "netMinor": 3074407
+    },
+    {
+      "date": "2011-05-15",
+      "grossMinor": 992428,
+      "cancellationsMinor": 0,
+      "saleLines": 809,
+      "cancellationLines": 0,
+      "netMinor": 992428
+    },
+    {
+      "date": "2011-05-16",
+      "grossMinor": 3965128,
+      "cancellationsMinor": 1437151,
+      "saleLines": 1584,
+      "cancellationLines": 16,
+      "netMinor": 2527977
+    },
+    {
+      "date": "2011-05-17",
+      "grossMinor": 5515199,
+      "cancellationsMinor": 154816,
+      "saleLines": 1801,
+      "cancellationLines": 56,
+      "netMinor": 5360383
+    },
+    {
+      "date": "2011-05-18",
+      "grossMinor": 3448344,
+      "cancellationsMinor": 14615,
+      "saleLines": 1343,
+      "cancellationLines": 14,
+      "netMinor": 3433729
+    },
+    {
+      "date": "2011-05-19",
+      "grossMinor": 3559935,
+      "cancellationsMinor": 125060,
+      "saleLines": 1888,
+      "cancellationLines": 56,
+      "netMinor": 3434875
+    },
+    {
+      "date": "2011-05-20",
+      "grossMinor": 2671817,
+      "cancellationsMinor": 46165,
+      "saleLines": 1104,
+      "cancellationLines": 18,
+      "netMinor": 2625652
+    },
+    {
+      "date": "2011-05-22",
+      "grossMinor": 2423109,
+      "cancellationsMinor": 2572,
+      "saleLines": 1553,
+      "cancellationLines": 11,
+      "netMinor": 2420537
+    },
+    {
+      "date": "2011-05-23",
+      "grossMinor": 3468560,
+      "cancellationsMinor": 394605,
+      "saleLines": 1564,
+      "cancellationLines": 60,
+      "netMinor": 3073955
+    },
+    {
+      "date": "2011-05-24",
+      "grossMinor": 3766004,
+      "cancellationsMinor": 63113,
+      "saleLines": 1698,
+      "cancellationLines": 46,
+      "netMinor": 3702891
+    },
+    {
+      "date": "2011-05-25",
+      "grossMinor": 2440812,
+      "cancellationsMinor": 25584,
+      "saleLines": 1291,
+      "cancellationLines": 16,
+      "netMinor": 2415228
+    },
+    {
+      "date": "2011-05-26",
+      "grossMinor": 3349703,
+      "cancellationsMinor": 28844,
+      "saleLines": 946,
+      "cancellationLines": 21,
+      "netMinor": 3320859
+    },
+    {
+      "date": "2011-05-27",
+      "grossMinor": 2844203,
+      "cancellationsMinor": 20984,
+      "saleLines": 1132,
+      "cancellationLines": 33,
+      "netMinor": 2823219
+    },
+    {
+      "date": "2011-05-29",
+      "grossMinor": 739430,
+      "cancellationsMinor": 18600,
+      "saleLines": 630,
+      "cancellationLines": 2,
+      "netMinor": 720830
+    },
+    {
+      "date": "2011-05-31",
+      "grossMinor": 2271406,
+      "cancellationsMinor": 74610,
+      "saleLines": 1267,
+      "cancellationLines": 14,
+      "netMinor": 2196796
+    },
+    {
+      "date": "2011-06-01",
+      "grossMinor": 2059569,
+      "cancellationsMinor": 40449,
+      "saleLines": 1418,
+      "cancellationLines": 38,
+      "netMinor": 2019120
+    },
+    {
+      "date": "2011-06-02",
+      "grossMinor": 3282614,
+      "cancellationsMinor": 32413,
+      "saleLines": 1539,
+      "cancellationLines": 39,
+      "netMinor": 3250201
+    },
+    {
+      "date": "2011-06-03",
+      "grossMinor": 1691325,
+      "cancellationsMinor": 16225,
+      "saleLines": 847,
+      "cancellationLines": 7,
+      "netMinor": 1675100
+    },
+    {
+      "date": "2011-06-05",
+      "grossMinor": 2563954,
+      "cancellationsMinor": 11919,
+      "saleLines": 1555,
+      "cancellationLines": 6,
+      "netMinor": 2552035
+    },
+    {
+      "date": "2011-06-06",
+      "grossMinor": 1778907,
+      "cancellationsMinor": 99768,
+      "saleLines": 1175,
+      "cancellationLines": 54,
+      "netMinor": 1679139
+    },
+    {
+      "date": "2011-06-07",
+      "grossMinor": 3795772,
+      "cancellationsMinor": 31342,
+      "saleLines": 1891,
+      "cancellationLines": 30,
+      "netMinor": 3764430
+    },
+    {
+      "date": "2011-06-08",
+      "grossMinor": 4326433,
+      "cancellationsMinor": 32342,
+      "saleLines": 2297,
+      "cancellationLines": 22,
+      "netMinor": 4294091
+    },
+    {
+      "date": "2011-06-09",
+      "grossMinor": 4638910,
+      "cancellationsMinor": 87335,
+      "saleLines": 1816,
+      "cancellationLines": 22,
+      "netMinor": 4551575
+    },
+    {
+      "date": "2011-06-10",
+      "grossMinor": 6223444,
+      "cancellationsMinor": 3969378,
+      "saleLines": 1018,
+      "cancellationLines": 20,
+      "netMinor": 2254066
+    },
+    {
+      "date": "2011-06-12",
+      "grossMinor": 1251706,
+      "cancellationsMinor": 3320,
+      "saleLines": 1068,
+      "cancellationLines": 7,
+      "netMinor": 1248386
+    },
+    {
+      "date": "2011-06-13",
+      "grossMinor": 2245721,
+      "cancellationsMinor": 208428,
+      "saleLines": 1404,
+      "cancellationLines": 68,
+      "netMinor": 2037293
+    },
+    {
+      "date": "2011-06-14",
+      "grossMinor": 4047401,
+      "cancellationsMinor": 26208,
+      "saleLines": 1574,
+      "cancellationLines": 10,
+      "netMinor": 4021193
+    },
+    {
+      "date": "2011-06-15",
+      "grossMinor": 4909799,
+      "cancellationsMinor": 295881,
+      "saleLines": 1671,
+      "cancellationLines": 32,
+      "netMinor": 4613918
+    },
+    {
+      "date": "2011-06-16",
+      "grossMinor": 3458468,
+      "cancellationsMinor": 45295,
+      "saleLines": 1501,
+      "cancellationLines": 22,
+      "netMinor": 3413173
+    },
+    {
+      "date": "2011-06-17",
+      "grossMinor": 2107617,
+      "cancellationsMinor": 27545,
+      "saleLines": 939,
+      "cancellationLines": 19,
+      "netMinor": 2080072
+    },
+    {
+      "date": "2011-06-19",
+      "grossMinor": 2244218,
+      "cancellationsMinor": 8217,
+      "saleLines": 1157,
+      "cancellationLines": 10,
+      "netMinor": 2236001
+    },
+    {
+      "date": "2011-06-20",
+      "grossMinor": 3751498,
+      "cancellationsMinor": 402158,
+      "saleLines": 1974,
+      "cancellationLines": 40,
+      "netMinor": 3349340
+    },
+    {
+      "date": "2011-06-21",
+      "grossMinor": 2478437,
+      "cancellationsMinor": 205436,
+      "saleLines": 1452,
+      "cancellationLines": 81,
+      "netMinor": 2273001
+    },
+    {
+      "date": "2011-06-22",
+      "grossMinor": 2182599,
+      "cancellationsMinor": 3105,
+      "saleLines": 1008,
+      "cancellationLines": 5,
+      "netMinor": 2179494
+    },
+    {
+      "date": "2011-06-23",
+      "grossMinor": 2524282,
+      "cancellationsMinor": 96951,
+      "saleLines": 1947,
+      "cancellationLines": 23,
+      "netMinor": 2427331
+    },
+    {
+      "date": "2011-06-24",
+      "grossMinor": 1952196,
+      "cancellationsMinor": 1090208,
+      "saleLines": 1024,
+      "cancellationLines": 12,
+      "netMinor": 861988
+    },
+    {
+      "date": "2011-06-26",
+      "grossMinor": 708249,
+      "cancellationsMinor": 90732,
+      "saleLines": 667,
+      "cancellationLines": 41,
+      "netMinor": 617517
+    },
+    {
+      "date": "2011-06-27",
+      "grossMinor": 1701576,
+      "cancellationsMinor": 19190,
+      "saleLines": 1155,
+      "cancellationLines": 24,
+      "netMinor": 1682386
+    },
+    {
+      "date": "2011-06-28",
+      "grossMinor": 3560732,
+      "cancellationsMinor": 90268,
+      "saleLines": 957,
+      "cancellationLines": 35,
+      "netMinor": 3470464
+    },
+    {
+      "date": "2011-06-29",
+      "grossMinor": 2208832,
+      "cancellationsMinor": 31289,
+      "saleLines": 1314,
+      "cancellationLines": 34,
+      "netMinor": 2177543
+    },
+    {
+      "date": "2011-06-30",
+      "grossMinor": 4479731,
+      "cancellationsMinor": 96276,
+      "saleLines": 1609,
+      "cancellationLines": 10,
+      "netMinor": 4383455
+    },
+    {
+      "date": "2011-07-01",
+      "grossMinor": 1367506,
+      "cancellationsMinor": 50324,
+      "saleLines": 975,
+      "cancellationLines": 42,
+      "netMinor": 1317182
+    },
+    {
+      "date": "2011-07-03",
+      "grossMinor": 603239,
+      "cancellationsMinor": 5525,
+      "saleLines": 598,
+      "cancellationLines": 4,
+      "netMinor": 597714
+    },
+    {
+      "date": "2011-07-04",
+      "grossMinor": 4465283,
+      "cancellationsMinor": 49808,
+      "saleLines": 2184,
+      "cancellationLines": 14,
+      "netMinor": 4415475
+    },
+    {
+      "date": "2011-07-05",
+      "grossMinor": 4075843,
+      "cancellationsMinor": 42346,
+      "saleLines": 2171,
+      "cancellationLines": 27,
+      "netMinor": 4033497
+    },
+    {
+      "date": "2011-07-06",
+      "grossMinor": 2638754,
+      "cancellationsMinor": 10796,
+      "saleLines": 1794,
+      "cancellationLines": 21,
+      "netMinor": 2627958
+    },
+    {
+      "date": "2011-07-07",
+      "grossMinor": 3244571,
+      "cancellationsMinor": 108799,
+      "saleLines": 1892,
+      "cancellationLines": 43,
+      "netMinor": 3135772
+    },
+    {
+      "date": "2011-07-08",
+      "grossMinor": 2708210,
+      "cancellationsMinor": 24202,
+      "saleLines": 1577,
+      "cancellationLines": 37,
+      "netMinor": 2684008
+    },
+    {
+      "date": "2011-07-10",
+      "grossMinor": 599387,
+      "cancellationsMinor": 30180,
+      "saleLines": 815,
+      "cancellationLines": 5,
+      "netMinor": 569207
+    },
+    {
+      "date": "2011-07-11",
+      "grossMinor": 2260502,
+      "cancellationsMinor": 17549,
+      "saleLines": 1487,
+      "cancellationLines": 24,
+      "netMinor": 2242953
+    },
+    {
+      "date": "2011-07-12",
+      "grossMinor": 2626255,
+      "cancellationsMinor": 37051,
+      "saleLines": 1645,
+      "cancellationLines": 20,
+      "netMinor": 2589204
+    },
+    {
+      "date": "2011-07-13",
+      "grossMinor": 2264194,
+      "cancellationsMinor": 1102989,
+      "saleLines": 1610,
+      "cancellationLines": 8,
+      "netMinor": 1161205
+    },
+    {
+      "date": "2011-07-14",
+      "grossMinor": 3360213,
+      "cancellationsMinor": 102617,
+      "saleLines": 1661,
+      "cancellationLines": 67,
+      "netMinor": 3257596
+    },
+    {
+      "date": "2011-07-15",
+      "grossMinor": 1483643,
+      "cancellationsMinor": 35750,
+      "saleLines": 1115,
+      "cancellationLines": 10,
+      "netMinor": 1447893
+    },
+    {
+      "date": "2011-07-17",
+      "grossMinor": 1719456,
+      "cancellationsMinor": 1990,
+      "saleLines": 1246,
+      "cancellationLines": 2,
+      "netMinor": 1717466
+    },
+    {
+      "date": "2011-07-18",
+      "grossMinor": 3883161,
+      "cancellationsMinor": 1038834,
+      "saleLines": 2150,
+      "cancellationLines": 61,
+      "netMinor": 2844327
+    },
+    {
+      "date": "2011-07-19",
+      "grossMinor": 5018283,
+      "cancellationsMinor": 86605,
+      "saleLines": 1574,
+      "cancellationLines": 89,
+      "netMinor": 4931678
+    },
+    {
+      "date": "2011-07-20",
+      "grossMinor": 3330824,
+      "cancellationsMinor": 600283,
+      "saleLines": 1993,
+      "cancellationLines": 17,
+      "netMinor": 2730541
+    },
+    {
+      "date": "2011-07-21",
+      "grossMinor": 3281854,
+      "cancellationsMinor": 186147,
+      "saleLines": 1490,
+      "cancellationLines": 73,
+      "netMinor": 3095707
+    },
+    {
+      "date": "2011-07-22",
+      "grossMinor": 2012486,
+      "cancellationsMinor": 10963,
+      "saleLines": 1280,
+      "cancellationLines": 16,
+      "netMinor": 2001523
+    },
+    {
+      "date": "2011-07-24",
+      "grossMinor": 2709946,
+      "cancellationsMinor": 62326,
+      "saleLines": 1116,
+      "cancellationLines": 9,
+      "netMinor": 2647620
+    },
+    {
+      "date": "2011-07-25",
+      "grossMinor": 2688715,
+      "cancellationsMinor": 19950,
+      "saleLines": 1935,
+      "cancellationLines": 6,
+      "netMinor": 2668765
+    },
+    {
+      "date": "2011-07-26",
+      "grossMinor": 2164426,
+      "cancellationsMinor": 37296,
+      "saleLines": 1226,
+      "cancellationLines": 34,
+      "netMinor": 2127130
+    },
+    {
+      "date": "2011-07-27",
+      "grossMinor": 2560293,
+      "cancellationsMinor": 3448,
+      "saleLines": 1221,
+      "cancellationLines": 3,
+      "netMinor": 2556845
+    },
+    {
+      "date": "2011-07-28",
+      "grossMinor": 5626974,
+      "cancellationsMinor": 56286,
+      "saleLines": 1502,
+      "cancellationLines": 41,
+      "netMinor": 5570688
+    },
+    {
+      "date": "2011-07-29",
+      "grossMinor": 1879040,
+      "cancellationsMinor": 69619,
+      "saleLines": 1118,
+      "cancellationLines": 11,
+      "netMinor": 1809421
+    },
+    {
+      "date": "2011-07-31",
+      "grossMinor": 3349061,
+      "cancellationsMinor": 425,
+      "saleLines": 1270,
+      "cancellationLines": 1,
+      "netMinor": 3348636
+    },
+    {
+      "date": "2011-08-01",
+      "grossMinor": 2138892,
+      "cancellationsMinor": 2608,
+      "saleLines": 1188,
+      "cancellationLines": 5,
+      "netMinor": 2136284
+    },
+    {
+      "date": "2011-08-02",
+      "grossMinor": 2658060,
+      "cancellationsMinor": 1163333,
+      "saleLines": 1332,
+      "cancellationLines": 37,
+      "netMinor": 1494727
+    },
+    {
+      "date": "2011-08-03",
+      "grossMinor": 2811314,
+      "cancellationsMinor": 103812,
+      "saleLines": 1518,
+      "cancellationLines": 37,
+      "netMinor": 2707502
+    },
+    {
+      "date": "2011-08-04",
+      "grossMinor": 6550221,
+      "cancellationsMinor": 447356,
+      "saleLines": 1782,
+      "cancellationLines": 47,
+      "netMinor": 6102865
+    },
+    {
+      "date": "2011-08-05",
+      "grossMinor": 2153858,
+      "cancellationsMinor": 24028,
+      "saleLines": 1442,
+      "cancellationLines": 7,
+      "netMinor": 2129830
+    },
+    {
+      "date": "2011-08-07",
+      "grossMinor": 757891,
+      "cancellationsMinor": 11479,
+      "saleLines": 529,
+      "cancellationLines": 12,
+      "netMinor": 746412
+    },
+    {
+      "date": "2011-08-08",
+      "grossMinor": 2337765,
+      "cancellationsMinor": 339050,
+      "saleLines": 1454,
+      "cancellationLines": 34,
+      "netMinor": 1998715
+    },
+    {
+      "date": "2011-08-09",
+      "grossMinor": 2767944,
+      "cancellationsMinor": 105624,
+      "saleLines": 1087,
+      "cancellationLines": 31,
+      "netMinor": 2662320
+    },
+    {
+      "date": "2011-08-10",
+      "grossMinor": 2879234,
+      "cancellationsMinor": 131812,
+      "saleLines": 1360,
+      "cancellationLines": 15,
+      "netMinor": 2747422
+    },
+    {
+      "date": "2011-08-11",
+      "grossMinor": 7243379,
+      "cancellationsMinor": 30100,
+      "saleLines": 1931,
+      "cancellationLines": 49,
+      "netMinor": 7213279
+    },
+    {
+      "date": "2011-08-12",
+      "grossMinor": 3223135,
+      "cancellationsMinor": 5775,
+      "saleLines": 1108,
+      "cancellationLines": 6,
+      "netMinor": 3217360
+    },
+    {
+      "date": "2011-08-14",
+      "grossMinor": 571857,
+      "cancellationsMinor": 56839,
+      "saleLines": 538,
+      "cancellationLines": 19,
+      "netMinor": 515018
+    },
+    {
+      "date": "2011-08-15",
+      "grossMinor": 1724397,
+      "cancellationsMinor": 3843,
+      "saleLines": 917,
+      "cancellationLines": 7,
+      "netMinor": 1720554
+    },
+    {
+      "date": "2011-08-16",
+      "grossMinor": 1923966,
+      "cancellationsMinor": 13595,
+      "saleLines": 1018,
+      "cancellationLines": 12,
+      "netMinor": 1910371
+    },
+    {
+      "date": "2011-08-17",
+      "grossMinor": 5349996,
+      "cancellationsMinor": 410774,
+      "saleLines": 1650,
+      "cancellationLines": 15,
+      "netMinor": 4939222
+    },
+    {
+      "date": "2011-08-18",
+      "grossMinor": 5410693,
+      "cancellationsMinor": 88126,
+      "saleLines": 1485,
+      "cancellationLines": 47,
+      "netMinor": 5322567
+    },
+    {
+      "date": "2011-08-19",
+      "grossMinor": 1734959,
+      "cancellationsMinor": 10105,
+      "saleLines": 811,
+      "cancellationLines": 8,
+      "netMinor": 1724854
+    },
+    {
+      "date": "2011-08-21",
+      "grossMinor": 1457686,
+      "cancellationsMinor": 2765,
+      "saleLines": 1065,
+      "cancellationLines": 5,
+      "netMinor": 1454921
+    },
+    {
+      "date": "2011-08-22",
+      "grossMinor": 2965146,
+      "cancellationsMinor": 167305,
+      "saleLines": 1267,
+      "cancellationLines": 5,
+      "netMinor": 2797841
+    },
+    {
+      "date": "2011-08-23",
+      "grossMinor": 2599368,
+      "cancellationsMinor": 23738,
+      "saleLines": 1434,
+      "cancellationLines": 24,
+      "netMinor": 2575630
+    },
+    {
+      "date": "2011-08-24",
+      "grossMinor": 4903536,
+      "cancellationsMinor": 1196046,
+      "saleLines": 1818,
+      "cancellationLines": 56,
+      "netMinor": 3707490
+    },
+    {
+      "date": "2011-08-25",
+      "grossMinor": 2382746,
+      "cancellationsMinor": 136858,
+      "saleLines": 1261,
+      "cancellationLines": 51,
+      "netMinor": 2245888
+    },
+    {
+      "date": "2011-08-26",
+      "grossMinor": 2562644,
+      "cancellationsMinor": 7621,
+      "saleLines": 918,
+      "cancellationLines": 3,
+      "netMinor": 2555023
+    },
+    {
+      "date": "2011-08-28",
+      "grossMinor": 1080503,
+      "cancellationsMinor": 2025,
+      "saleLines": 1196,
+      "cancellationLines": 4,
+      "netMinor": 1078478
+    },
+    {
+      "date": "2011-08-30",
+      "grossMinor": 3186631,
+      "cancellationsMinor": 22541,
+      "saleLines": 3216,
+      "cancellationLines": 17,
+      "netMinor": 3164090
+    },
+    {
+      "date": "2011-08-31",
+      "grossMinor": 2538017,
+      "cancellationsMinor": 926217,
+      "saleLines": 1158,
+      "cancellationLines": 115,
+      "netMinor": 1611800
+    },
+    {
+      "date": "2011-09-01",
+      "grossMinor": 3737015,
+      "cancellationsMinor": 7355,
+      "saleLines": 1398,
+      "cancellationLines": 6,
+      "netMinor": 3729660
+    },
+    {
+      "date": "2011-09-02",
+      "grossMinor": 4232202,
+      "cancellationsMinor": 57695,
+      "saleLines": 2328,
+      "cancellationLines": 29,
+      "netMinor": 4174507
+    },
+    {
+      "date": "2011-09-04",
+      "grossMinor": 1711959,
+      "cancellationsMinor": 10110,
+      "saleLines": 1333,
+      "cancellationLines": 10,
+      "netMinor": 1701849
+    },
+    {
+      "date": "2011-09-05",
+      "grossMinor": 3715714,
+      "cancellationsMinor": 31310,
+      "saleLines": 1565,
+      "cancellationLines": 18,
+      "netMinor": 3684404
+    },
+    {
+      "date": "2011-09-06",
+      "grossMinor": 2834991,
+      "cancellationsMinor": 29729,
+      "saleLines": 1122,
+      "cancellationLines": 18,
+      "netMinor": 2805262
+    },
+    {
+      "date": "2011-09-07",
+      "grossMinor": 3441353,
+      "cancellationsMinor": 28788,
+      "saleLines": 2078,
+      "cancellationLines": 32,
+      "netMinor": 3412565
+    },
+    {
+      "date": "2011-09-08",
+      "grossMinor": 2719580,
+      "cancellationsMinor": 48780,
+      "saleLines": 1748,
+      "cancellationLines": 24,
+      "netMinor": 2670800
+    },
+    {
+      "date": "2011-09-09",
+      "grossMinor": 3007562,
+      "cancellationsMinor": 75793,
+      "saleLines": 1558,
+      "cancellationLines": 47,
+      "netMinor": 2931769
+    },
+    {
+      "date": "2011-09-11",
+      "grossMinor": 3551167,
+      "cancellationsMinor": 4620,
+      "saleLines": 2027,
+      "cancellationLines": 5,
+      "netMinor": 3546547
+    },
+    {
+      "date": "2011-09-12",
+      "grossMinor": 2973833,
+      "cancellationsMinor": 69902,
+      "saleLines": 1633,
+      "cancellationLines": 63,
+      "netMinor": 2903931
+    },
+    {
+      "date": "2011-09-13",
+      "grossMinor": 5511705,
+      "cancellationsMinor": 28860,
+      "saleLines": 2422,
+      "cancellationLines": 9,
+      "netMinor": 5482845
+    },
+    {
+      "date": "2011-09-14",
+      "grossMinor": 2359298,
+      "cancellationsMinor": 23232,
+      "saleLines": 1332,
+      "cancellationLines": 34,
+      "netMinor": 2336066
+    },
+    {
+      "date": "2011-09-15",
+      "grossMinor": 7821895,
+      "cancellationsMinor": 1527514,
+      "saleLines": 2150,
+      "cancellationLines": 46,
+      "netMinor": 6294381
+    },
+    {
+      "date": "2011-09-16",
+      "grossMinor": 2772422,
+      "cancellationsMinor": 186616,
+      "saleLines": 1438,
+      "cancellationLines": 13,
+      "netMinor": 2585806
+    },
+    {
+      "date": "2011-09-18",
+      "grossMinor": 1574573,
+      "cancellationsMinor": 5340,
+      "saleLines": 1272,
+      "cancellationLines": 2,
+      "netMinor": 1569233
+    },
+    {
+      "date": "2011-09-19",
+      "grossMinor": 4926988,
+      "cancellationsMinor": 305767,
+      "saleLines": 1383,
+      "cancellationLines": 44,
+      "netMinor": 4621221
+    },
+    {
+      "date": "2011-09-20",
+      "grossMinor": 10961203,
+      "cancellationsMinor": 32582,
+      "saleLines": 1708,
+      "cancellationLines": 9,
+      "netMinor": 10928621
+    },
+    {
+      "date": "2011-09-21",
+      "grossMinor": 4856068,
+      "cancellationsMinor": 561661,
+      "saleLines": 3024,
+      "cancellationLines": 98,
+      "netMinor": 4294407
+    },
+    {
+      "date": "2011-09-22",
+      "grossMinor": 5935479,
+      "cancellationsMinor": 227796,
+      "saleLines": 2672,
+      "cancellationLines": 62,
+      "netMinor": 5707683
+    },
+    {
+      "date": "2011-09-23",
+      "grossMinor": 4060175,
+      "cancellationsMinor": 117527,
+      "saleLines": 2587,
+      "cancellationLines": 40,
+      "netMinor": 3942648
+    },
+    {
+      "date": "2011-09-25",
+      "grossMinor": 3137266,
+      "cancellationsMinor": 16174,
+      "saleLines": 1980,
+      "cancellationLines": 6,
+      "netMinor": 3121092
+    },
+    {
+      "date": "2011-09-26",
+      "grossMinor": 2933517,
+      "cancellationsMinor": 69290,
+      "saleLines": 1527,
+      "cancellationLines": 22,
+      "netMinor": 2864227
+    },
+    {
+      "date": "2011-09-27",
+      "grossMinor": 3632295,
+      "cancellationsMinor": 57079,
+      "saleLines": 1845,
+      "cancellationLines": 37,
+      "netMinor": 3575216
+    },
+    {
+      "date": "2011-09-28",
+      "grossMinor": 4374906,
+      "cancellationsMinor": 36602,
+      "saleLines": 2830,
+      "cancellationLines": 45,
+      "netMinor": 4338304
+    },
+    {
+      "date": "2011-09-29",
+      "grossMinor": 4640145,
+      "cancellationsMinor": 293712,
+      "saleLines": 2460,
+      "cancellationLines": 46,
+      "netMinor": 4346433
+    },
+    {
+      "date": "2011-09-30",
+      "grossMinor": 4435706,
+      "cancellationsMinor": 36421,
+      "saleLines": 1841,
+      "cancellationLines": 40,
+      "netMinor": 4399285
+    },
+    {
+      "date": "2011-10-02",
+      "grossMinor": 1163453,
+      "cancellationsMinor": 1095,
+      "saleLines": 1426,
+      "cancellationLines": 3,
+      "netMinor": 1162358
+    },
+    {
+      "date": "2011-10-03",
+      "grossMinor": 6637682,
+      "cancellationsMinor": 216204,
+      "saleLines": 2268,
+      "cancellationLines": 13,
+      "netMinor": 6421478
+    },
+    {
+      "date": "2011-10-04",
+      "grossMinor": 4881065,
+      "cancellationsMinor": 56981,
+      "saleLines": 2759,
+      "cancellationLines": 30,
+      "netMinor": 4824084
+    },
+    {
+      "date": "2011-10-05",
+      "grossMinor": 7559363,
+      "cancellationsMinor": 34920,
+      "saleLines": 2386,
+      "cancellationLines": 58,
+      "netMinor": 7524443
+    },
+    {
+      "date": "2011-10-06",
+      "grossMinor": 6289119,
+      "cancellationsMinor": 758491,
+      "saleLines": 2929,
+      "cancellationLines": 227,
+      "netMinor": 5530628
+    },
+    {
+      "date": "2011-10-07",
+      "grossMinor": 5379070,
+      "cancellationsMinor": 625268,
+      "saleLines": 2355,
+      "cancellationLines": 62,
+      "netMinor": 4753802
+    },
+    {
+      "date": "2011-10-09",
+      "grossMinor": 1252440,
+      "cancellationsMinor": 60216,
+      "saleLines": 1261,
+      "cancellationLines": 31,
+      "netMinor": 1192224
+    },
+    {
+      "date": "2011-10-10",
+      "grossMinor": 4823918,
+      "cancellationsMinor": 397329,
+      "saleLines": 3158,
+      "cancellationLines": 64,
+      "netMinor": 4426589
+    },
+    {
+      "date": "2011-10-11",
+      "grossMinor": 5257294,
+      "cancellationsMinor": 1430519,
+      "saleLines": 2413,
+      "cancellationLines": 46,
+      "netMinor": 3826775
+    },
+    {
+      "date": "2011-10-12",
+      "grossMinor": 3215928,
+      "cancellationsMinor": 285643,
+      "saleLines": 2026,
+      "cancellationLines": 157,
+      "netMinor": 2930285
+    },
+    {
+      "date": "2011-10-13",
+      "grossMinor": 3744618,
+      "cancellationsMinor": 37901,
+      "saleLines": 2297,
+      "cancellationLines": 46,
+      "netMinor": 3706717
+    },
+    {
+      "date": "2011-10-14",
+      "grossMinor": 3634764,
+      "cancellationsMinor": 112210,
+      "saleLines": 1775,
+      "cancellationLines": 27,
+      "netMinor": 3522554
+    },
+    {
+      "date": "2011-10-16",
+      "grossMinor": 2201096,
+      "cancellationsMinor": 40552,
+      "saleLines": 1247,
+      "cancellationLines": 7,
+      "netMinor": 2160544
+    },
+    {
+      "date": "2011-10-17",
+      "grossMinor": 5206220,
+      "cancellationsMinor": 499806,
+      "saleLines": 2901,
+      "cancellationLines": 40,
+      "netMinor": 4706414
+    },
+    {
+      "date": "2011-10-18",
+      "grossMinor": 4533216,
+      "cancellationsMinor": 69432,
+      "saleLines": 2853,
+      "cancellationLines": 42,
+      "netMinor": 4463784
+    },
+    {
+      "date": "2011-10-19",
+      "grossMinor": 4257336,
+      "cancellationsMinor": 656993,
+      "saleLines": 2270,
+      "cancellationLines": 46,
+      "netMinor": 3600343
+    },
+    {
+      "date": "2011-10-20",
+      "grossMinor": 6112290,
+      "cancellationsMinor": 32976,
+      "saleLines": 2312,
+      "cancellationLines": 38,
+      "netMinor": 6079314
+    },
+    {
+      "date": "2011-10-21",
+      "grossMinor": 6322664,
+      "cancellationsMinor": 26538,
+      "saleLines": 1386,
+      "cancellationLines": 17,
+      "netMinor": 6296126
+    },
+    {
+      "date": "2011-10-23",
+      "grossMinor": 1233916,
+      "cancellationsMinor": 3675,
+      "saleLines": 1724,
+      "cancellationLines": 4,
+      "netMinor": 1230241
+    },
+    {
+      "date": "2011-10-24",
+      "grossMinor": 4875291,
+      "cancellationsMinor": 1034519,
+      "saleLines": 2841,
+      "cancellationLines": 116,
+      "netMinor": 3840772
+    },
+    {
+      "date": "2011-10-25",
+      "grossMinor": 4131464,
+      "cancellationsMinor": 50715,
+      "saleLines": 2450,
+      "cancellationLines": 13,
+      "netMinor": 4080749
+    },
+    {
+      "date": "2011-10-26",
+      "grossMinor": 3805943,
+      "cancellationsMinor": 21735,
+      "saleLines": 1908,
+      "cancellationLines": 16,
+      "netMinor": 3784208
+    },
+    {
+      "date": "2011-10-27",
+      "grossMinor": 5729172,
+      "cancellationsMinor": 981157,
+      "saleLines": 2478,
+      "cancellationLines": 56,
+      "netMinor": 4748015
+    },
+    {
+      "date": "2011-10-28",
+      "grossMinor": 4056570,
+      "cancellationsMinor": 100623,
+      "saleLines": 1610,
+      "cancellationLines": 21,
+      "netMinor": 3955947
+    },
+    {
+      "date": "2011-10-30",
+      "grossMinor": 3457123,
+      "cancellationsMinor": 2595,
+      "saleLines": 2901,
+      "cancellationLines": 6,
+      "netMinor": 3454528
+    },
+    {
+      "date": "2011-10-31",
+      "grossMinor": 5736915,
+      "cancellationsMinor": 889370,
+      "saleLines": 3370,
+      "cancellationLines": 14,
+      "netMinor": 4847545
+    },
+    {
+      "date": "2011-11-01",
+      "grossMinor": 2915515,
+      "cancellationsMinor": 41360,
+      "saleLines": 1733,
+      "cancellationLines": 41,
+      "netMinor": 2874155
+    },
+    {
+      "date": "2011-11-02",
+      "grossMinor": 4588834,
+      "cancellationsMinor": 64928,
+      "saleLines": 2579,
+      "cancellationLines": 38,
+      "netMinor": 4523906
+    },
+    {
+      "date": "2011-11-03",
+      "grossMinor": 6356149,
+      "cancellationsMinor": 74494,
+      "saleLines": 2378,
+      "cancellationLines": 29,
+      "netMinor": 6281655
+    },
+    {
+      "date": "2011-11-04",
+      "grossMinor": 6297736,
+      "cancellationsMinor": 289560,
+      "saleLines": 2906,
+      "cancellationLines": 93,
+      "netMinor": 6008176
+    },
+    {
+      "date": "2011-11-06",
+      "grossMinor": 4294634,
+      "cancellationsMinor": 3394,
+      "saleLines": 3426,
+      "cancellationLines": 11,
+      "netMinor": 4291240
+    },
+    {
+      "date": "2011-11-07",
+      "grossMinor": 8588181,
+      "cancellationsMinor": 1588073,
+      "saleLines": 2047,
+      "cancellationLines": 43,
+      "netMinor": 7000108
+    },
+    {
+      "date": "2011-11-08",
+      "grossMinor": 5770024,
+      "cancellationsMinor": 105258,
+      "saleLines": 3978,
+      "cancellationLines": 90,
+      "netMinor": 5664766
+    },
+    {
+      "date": "2011-11-09",
+      "grossMinor": 6612757,
+      "cancellationsMinor": 352814,
+      "saleLines": 2690,
+      "cancellationLines": 24,
+      "netMinor": 6259943
+    },
+    {
+      "date": "2011-11-10",
+      "grossMinor": 7100826,
+      "cancellationsMinor": 205202,
+      "saleLines": 3196,
+      "cancellationLines": 58,
+      "netMinor": 6895624
+    },
+    {
+      "date": "2011-11-11",
+      "grossMinor": 5525717,
+      "cancellationsMinor": 42166,
+      "saleLines": 4070,
+      "cancellationLines": 15,
+      "netMinor": 5483551
+    },
+    {
+      "date": "2011-11-13",
+      "grossMinor": 3406992,
+      "cancellationsMinor": 54970,
+      "saleLines": 2993,
+      "cancellationLines": 25,
+      "netMinor": 3352022
+    },
+    {
+      "date": "2011-11-14",
+      "grossMinor": 11441989,
+      "cancellationsMinor": 227878,
+      "saleLines": 3521,
+      "cancellationLines": 62,
+      "netMinor": 11214111
+    },
+    {
+      "date": "2011-11-15",
+      "grossMinor": 6080729,
+      "cancellationsMinor": 21306,
+      "saleLines": 3396,
+      "cancellationLines": 25,
+      "netMinor": 6059423
+    },
+    {
+      "date": "2011-11-16",
+      "grossMinor": 6595817,
+      "cancellationsMinor": 154947,
+      "saleLines": 4143,
+      "cancellationLines": 34,
+      "netMinor": 6440870
+    },
+    {
+      "date": "2011-11-17",
+      "grossMinor": 6110313,
+      "cancellationsMinor": 77341,
+      "saleLines": 3574,
+      "cancellationLines": 31,
+      "netMinor": 6032972
+    },
+    {
+      "date": "2011-11-18",
+      "grossMinor": 5127539,
+      "cancellationsMinor": 324359,
+      "saleLines": 2814,
+      "cancellationLines": 92,
+      "netMinor": 4803180
+    },
+    {
+      "date": "2011-11-20",
+      "grossMinor": 3505857,
+      "cancellationsMinor": 15656,
+      "saleLines": 3317,
+      "cancellationLines": 17,
+      "netMinor": 3490201
+    },
+    {
+      "date": "2011-11-21",
+      "grossMinor": 4980572,
+      "cancellationsMinor": 150322,
+      "saleLines": 2883,
+      "cancellationLines": 40,
+      "netMinor": 4830250
+    },
+    {
+      "date": "2011-11-22",
+      "grossMinor": 6408982,
+      "cancellationsMinor": 178250,
+      "saleLines": 3899,
+      "cancellationLines": 49,
+      "netMinor": 6230732
+    },
+    {
+      "date": "2011-11-23",
+      "grossMinor": 8010418,
+      "cancellationsMinor": 162348,
+      "saleLines": 3562,
+      "cancellationLines": 52,
+      "netMinor": 7848070
+    },
+    {
+      "date": "2011-11-24",
+      "grossMinor": 5097863,
+      "cancellationsMinor": 289835,
+      "saleLines": 3691,
+      "cancellationLines": 52,
+      "netMinor": 4808028
+    },
+    {
+      "date": "2011-11-25",
+      "grossMinor": 5082273,
+      "cancellationsMinor": 38001,
+      "saleLines": 3087,
+      "cancellationLines": 27,
+      "netMinor": 5044272
+    },
+    {
+      "date": "2011-11-27",
+      "grossMinor": 2061108,
+      "cancellationsMinor": 3958,
+      "saleLines": 2532,
+      "cancellationLines": 10,
+      "netMinor": 2057150
+    },
+    {
+      "date": "2011-11-28",
+      "grossMinor": 5716519,
+      "cancellationsMinor": 172317,
+      "saleLines": 3304,
+      "cancellationLines": 26,
+      "netMinor": 5544202
+    },
+    {
+      "date": "2011-11-29",
+      "grossMinor": 7259593,
+      "cancellationsMinor": 37673,
+      "saleLines": 4292,
+      "cancellationLines": 16,
+      "netMinor": 7221920
+    },
+    {
+      "date": "2011-11-30",
+      "grossMinor": 6012696,
+      "cancellationsMinor": 97598,
+      "saleLines": 3358,
+      "cancellationLines": 76,
+      "netMinor": 5915098
+    },
+    {
+      "date": "2011-12-01",
+      "grossMinor": 5219725,
+      "cancellationsMinor": 78630,
+      "saleLines": 2813,
+      "cancellationLines": 87,
+      "netMinor": 5141095
+    },
+    {
+      "date": "2011-12-02",
+      "grossMinor": 5766407,
+      "cancellationsMinor": 57801,
+      "saleLines": 2826,
+      "cancellationLines": 39,
+      "netMinor": 5708606
+    },
+    {
+      "date": "2011-12-04",
+      "grossMinor": 2462143,
+      "cancellationsMinor": 5565,
+      "saleLines": 2031,
+      "cancellationLines": 5,
+      "netMinor": 2456578
+    },
+    {
+      "date": "2011-12-05",
+      "grossMinor": 8874196,
+      "cancellationsMinor": 3099064,
+      "saleLines": 5297,
+      "cancellationLines": 26,
+      "netMinor": 5775132
+    },
+    {
+      "date": "2011-12-06",
+      "grossMinor": 5671321,
+      "cancellationsMinor": 248484,
+      "saleLines": 3262,
+      "cancellationLines": 100,
+      "netMinor": 5422837
+    },
+    {
+      "date": "2011-12-07",
+      "grossMinor": 7543916,
+      "cancellationsMinor": 36294,
+      "saleLines": 2390,
+      "cancellationLines": 29,
+      "netMinor": 7507622
+    },
+    {
+      "date": "2011-12-08",
+      "grossMinor": 8249500,
+      "cancellationsMinor": 107722,
+      "saleLines": 4867,
+      "cancellationLines": 67,
+      "netMinor": 8141778
+    },
+    {
+      "date": "2011-12-09",
+      "grossMinor": 20092060,
+      "cancellationsMinor": 16878907,
+      "saleLines": 1625,
+      "cancellationLines": 7,
+      "netMinor": 3213153
+    }
+  ]
+}
