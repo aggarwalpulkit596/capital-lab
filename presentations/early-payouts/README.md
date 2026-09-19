@@ -23,7 +23,7 @@ Open **http://127.0.0.1:8081**. The slides do not require an internet connection
 | Contents → Scroll view | Read as a continuous document                                |
 | Contents → Sources     | Open the full source index                                   |
 
-The interactive eligibility example is slide 25 in the full deck. Change proceeds, existing exposure, funding cash, and the stale-data toggle. It demonstrates cent arithmetic and eligibility; it does not call the backend or initiate a payout. PDF export resets it to its initial example.
+The interactive eligibility example is slide 25 in the full deck. Change proceeds, existing exposure, the exposure ceiling, and the stale-data toggle. It demonstrates cent arithmetic and eligibility; it does not call the backend or initiate a payout. PDF export resets it to its initial example.
 
 ## Learning route
 
