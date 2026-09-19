@@ -10,10 +10,14 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:browser": "playwright test"
+    "test:browser": "playwright test",
+    "slides:build": "node scripts/build-slides.mjs",
+    "slides:export": "npm run slides:build && node scripts/export-slides.mjs",
+    "slides": "npm run slides:build && python3 -m http.server 8081 --bind 127.0.0.1 --directory build/presentations/early-payouts"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
-    "prettier": "3.9.8"
+    "prettier": "3.9.8",
+    "reveal.js": "6.0.2"
   }
 }

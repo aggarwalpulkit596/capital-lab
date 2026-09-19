@@ -21,7 +21,11 @@ The dashboard also runs concurrent reservation races, duplicate requests, stale 
 
 See the [five-minute walkthrough and scope](docs/dashboard.md), [dataset provenance](data/README.md), and [contribution guide](CONTRIBUTING.md). No Node build step is required. The database volume and per-run evidence are preserved; stop the server with Ctrl-C and the database with `docker compose stop postgres`.
 
-## Run
+## Learning presentation
+
+The [Reveal.js teaching deck](presentations/early-payouts/README.md) covers fundamentals through implementation and future architecture, with 71 slides, an 18-slide interview route, speaker notes, cited sources, and an interactive eligibility example. Run `npm ci` and `npm run slides`, then open **http://127.0.0.1:8081**. PDF export and offline viewing instructions are included.
+
+## Run the backend
 
 Requires JDK 17. The Gradle wrapper pins the build tool and downloads dependencies on first use.
 
