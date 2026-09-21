@@ -1,6 +1,19 @@
 # Contributing
 
-Start with the [dashboard walkthrough](docs/dashboard.md) and [architecture](docs/architecture/README.md). Contributions to original code and documentation use Apache 2.0; dataset derivatives retain their source license and attribution.
+Start with the [dashboard walkthrough](docs/dashboard.md) and [architecture](docs/architecture/README.md). Contributions to original code and documentation use Apache 2.0; dataset derivatives retain their source license and attribution. Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Before you open anything
+
+| You have                           | Open                                                                   |
+| ---------------------------------- | ---------------------------------------------------------------------- |
+| A reproducible failure             | A [bug report](.github/ISSUE_TEMPLATE/bug.md)                          |
+| An idea for a scenario or view     | A [capability proposal](.github/ISSUE_TEMPLATE/feature.md)             |
+| Something unclear or wrong in docs | A [documentation issue](.github/ISSUE_TEMPLATE/question.md)            |
+| A security or deployment concern   | Private reporting, not a public issue — see [SECURITY.md](SECURITY.md) |
+
+Small fixes can go straight to a pull request. Open an issue first for anything that changes a money rule, a database schema, or a statement about what the lab models, so the scope is agreed before the work.
+
+Every user-visible change adds an entry under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md).
 
 ## Local development
 

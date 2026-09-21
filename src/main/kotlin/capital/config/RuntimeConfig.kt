@@ -12,9 +12,16 @@ data class JdbcSettings(
     val socketTimeoutSeconds: Int = 30,
 ) {
     init {
-        require(lockTimeoutMillis > 0 && statementTimeoutMillis >= lockTimeoutMillis)
-        require(connectTimeoutSeconds > 0 && socketTimeoutSeconds > 0)
-        require(socketTimeoutSeconds.toLong() * 1_000 > statementTimeoutMillis)
+        require(lockTimeoutMillis > 0 && statementTimeoutMillis >= lockTimeoutMillis) {
+            "LAB_DB_LOCK_TIMEOUT_MS must be positive and no larger than LAB_DB_STATEMENT_TIMEOUT_MS; got $lockTimeoutMillis and $statementTimeoutMillis"
+        }
+        require(connectTimeoutSeconds > 0 && socketTimeoutSeconds > 0) {
+            "LAB_DB_CONNECT_TIMEOUT_SECONDS and LAB_DB_SOCKET_TIMEOUT_SECONDS must be positive; got $connectTimeoutSeconds and $socketTimeoutSeconds"
+        }
+        // A socket that closes first would mask the statement timeout as a connection failure.
+        require(socketTimeoutSeconds.toLong() * 1_000 > statementTimeoutMillis) {
+            "LAB_DB_SOCKET_TIMEOUT_SECONDS ($socketTimeoutSeconds) must exceed LAB_DB_STATEMENT_TIMEOUT_MS ($statementTimeoutMillis)"
+        }
     }
 }
 
@@ -27,9 +34,20 @@ data class HttpSettings(
     val maxRequestBytes: Int = 8 * 1_024,
 ) {
     init {
-        require(port in 0..65_535)
-        require(workerThreads in 1..64 && queueCapacity in 1..4_096 && backlog > 0)
-        require(maxActiveRuns in 1..1_000 && maxRequestBytes in 1..1_048_576)
+        require(port in 0..65_535) { "LAB_HTTP_PORT must be between 0 and 65535; got $port" }
+        require(workerThreads in 1..64) {
+            "LAB_HTTP_WORKERS must be between 1 and 64; got $workerThreads"
+        }
+        require(queueCapacity in 1..4_096) {
+            "LAB_HTTP_QUEUE_CAPACITY must be between 1 and 4096; got $queueCapacity"
+        }
+        require(backlog > 0) { "Accept backlog must be positive; got $backlog" }
+        require(maxActiveRuns in 1..1_000) {
+            "LAB_MAX_ACTIVE_RUNS must be between 1 and 1000; got $maxActiveRuns"
+        }
+        require(maxRequestBytes in 1..1_048_576) {
+            "Maximum request size must be between 1 and 1048576 bytes; got $maxRequestBytes"
+        }
     }
 }
 
@@ -38,7 +56,10 @@ data class RecoverySettings(
     val retryDelay: Duration = Duration.ofSeconds(2),
 ) {
     init {
-        require(!lease.isNegative && !lease.isZero && !retryDelay.isNegative)
+        require(!lease.isNegative && !lease.isZero) {
+            "Recovery lease must be positive; got $lease"
+        }
+        require(!retryDelay.isNegative) { "Retry delay cannot be negative; got $retryDelay" }
     }
 }
 
@@ -47,8 +68,12 @@ data class BankHttpSettings(
     val responseTimeout: Duration = Duration.ofSeconds(3),
 ) {
     init {
-        require(!connectTimeout.isNegative && !connectTimeout.isZero)
-        require(responseTimeout >= connectTimeout)
+        require(!connectTimeout.isNegative && !connectTimeout.isZero) {
+            "Bank connect timeout must be positive; got $connectTimeout"
+        }
+        require(responseTimeout >= connectTimeout) {
+            "Bank response timeout ($responseTimeout) must be at least the connect timeout ($connectTimeout)"
+        }
     }
 }
 

@@ -1,0 +1,24 @@
+# Review ownership. GitHub requests these reviewers automatically on a pull request.
+# Money rules, persisted schemas, and stated scope need an owner's review by policy;
+# see CONTRIBUTING.md.
+
+*                                   @aggarwalpulkit596
+
+# Financial policy and the evaluator define every quoted amount.
+/src/main/kotlin/capital/Eligibility.kt   @aggarwalpulkit596
+/src/main/kotlin/capital/policy/          @aggarwalpulkit596
+/fixtures/                                @aggarwalpulkit596
+
+# Applied SQL resources are immutable, checksum-verified migrations.
+/src/main/resources/db/                   @aggarwalpulkit596
+
+# Supply chain: locks, checksums, and pinned action digests.
+/gradle.lockfile                          @aggarwalpulkit596
+/gradle/verification-metadata.xml         @aggarwalpulkit596
+/package-lock.json                        @aggarwalpulkit596
+/.github/workflows/                       @aggarwalpulkit596
+
+# Statements about scope and modeling honesty.
+/README.md                                @aggarwalpulkit596
+/SECURITY.md                              @aggarwalpulkit596
+/docs/engineering-reference.md            @aggarwalpulkit596
