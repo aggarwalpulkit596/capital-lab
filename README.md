@@ -2,7 +2,7 @@
 
 A local interactive lab for understanding app-store receivables financing: explainable eligibility, risk holds, transactional reservations, simulated bank failures, balanced journals, and reconciliation. Built with Kotlin, PostgreSQL, and a dependency-free browser interface.
 
-**20 guided scenarios · 305 public-data replay days · 72 passing tests · Apache 2.0 code**
+**20 guided scenarios · 305 public-data replay days · 84 passing backend tests · Apache 2.0 code**
 
 All money is synthetic. The public dataset is real retail history, with a separately attributed CC BY 4.0 license; it is not app-store or labeled fraud data. This is an independent learning project, not RevenueCat's implementation or a validated underwriting model.
 
@@ -21,7 +21,11 @@ The dashboard also runs concurrent reservation races, duplicate requests, stale 
 
 See the [five-minute walkthrough and scope](docs/dashboard.md), [dataset provenance](data/README.md), and [contribution guide](CONTRIBUTING.md). No Node build step is required. The database volume and per-run evidence are preserved; stop the server with Ctrl-C and the database with `docker compose stop postgres`.
 
-## Run
+## Learning presentation
+
+The [Reveal.js teaching deck](presentations/early-payouts/README.md) covers fundamentals through implementation and future architecture, with 71 slides, an 18-slide interview route, speaker notes, cited sources, and an interactive eligibility example. Run `npm ci` and `npm run slides`, then open **http://127.0.0.1:8081**. PDF export and offline viewing instructions are included.
+
+## Run the backend
 
 Requires JDK 17. The Gradle wrapper pins the build tool and downloads dependencies on first use.
 
@@ -56,12 +60,12 @@ An optional argument to the packaged executable selects a different fixture JSON
 
 Each scenario describes an alternative snapshot of one synthetic pool, not a sequence of executed payments. Amounts below are USD.
 
-| Scenario | New principal quoted | Fee | Net cash quoted | Explanation |
-| --- | ---: | ---: | ---: | --- |
-| $1,000 proceeds, $600 outstanding | $200 | $5 | $195 | Expected report is present |
-| Same amounts, coverage one day behind | $0 | $0 | $0 | Hold, despite a recent download |
-| Proceeds revised to $700, $600 outstanding | $0 | $0 | $0 | Existing exposure is $40 above the $560 limit |
-| $900 proceeds, $400 outstanding | $320 | $8 | $312 | Calculation discussed with the user |
+| Scenario                                   | New principal quoted | Fee | Net cash quoted | Explanation                                   |
+| ------------------------------------------ | -------------------: | --: | --------------: | --------------------------------------------- |
+| $1,000 proceeds, $600 outstanding          |                 $200 |  $5 |            $195 | Expected report is present                    |
+| Same amounts, coverage one day behind      |                   $0 |  $0 |              $0 | Hold, despite a recent download               |
+| Proceeds revised to $700, $600 outstanding |                   $0 |  $0 |              $0 | Existing exposure is $40 above the $560 limit |
+| $900 proceeds, $400 outstanding            |                 $320 |  $8 |            $312 | Calculation discussed with the user           |
 
 The JSON decision records preserve source inputs, policy parameters, evaluation time, reasons, and amounts. `arithmeticCapacityCents` is diagnostic only; `eligiblePrincipalCents` is the quote after freshness checks. A quote reserves no capacity and moves no money.
 
@@ -78,6 +82,13 @@ The JSON decision records preserve source inputs, policy parameters, evaluation 
 The policy uses an illustrative 80% advance rate and 2.5% fee. Limits round down; fees round half-up and are deducted from principal. The optional reporting allowance defaults to zero extra days. Expected coverage is supplied by the fixture, not calculated from Apple or Google's reporting calendars.
 
 The payment slice persists frozen commands, reservations, dispatch intents, simulator transfer records, and minimal funding journals. The dashboard adds read-only payment reconciliation and bounded allocation of one final store receipt per pool, including duplicate protection and shortfalls. There is no real bank integration, trained risk model, or full settlement platform. Simulator behavior and database tests do not establish production banking guarantees. The quote function itself remains side-effect free.
+
+## Engineering reference
+
+The default developer view shows principal, the fixed 2.5% fee, and net payout together. Finance has focused payout, risk, ledger, and reconciliation views. The engineering workbench retains the fault scenarios and detailed evidence.
+
+- [Implemented code boundaries and financial guarantees](docs/engineering-reference.md)
+- [Local configuration and operations](docs/runbook.md)
 
 ## Project notes
 

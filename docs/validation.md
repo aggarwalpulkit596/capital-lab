@@ -58,13 +58,13 @@ At this milestone, all money and source data were synthetic. No real bank or sto
 
 `check` completed successfully with **72 tests, zero failures, errors, or skipped tests**:
 
-| Suite | Tests |
-| --- | ---: |
-| EligibilityTest | 18 |
-| FixtureTest | 5 |
-| MonitoringTest | 6 |
-| ReservationIntegrationTest | 21 |
-| DashboardIntegrationTest | 22 |
+| Suite                      | Tests |
+| -------------------------- | ----: |
+| EligibilityTest            |    18 |
+| FixtureTest                |     5 |
+| MonitoringTest             |     6 |
+| ReservationIntegrationTest |    21 |
+| DashboardIntegrationTest   |    22 |
 
 The dashboard suite executes all 20 advertised scenarios through the real HTTP API against PostgreSQL and asserts resulting financial balances and states. It also checks malformed/oversized input, cross-origin and missing-header rejection, duplicate step requests, and concurrent allocation of the same collection receipt. The latter test verifies one posting, no duplicate repayment, unchanged lifetime funding, a closed pool that cannot originate again, and immutable collection history.
 
@@ -77,3 +77,13 @@ Browser review in Chrome confirmed scenario creation and execution, recovery to 
 The dataset importer was rerun from the saved official archive; its output was byte-for-byte identical. Final `processResources installDist` succeeded after the small UI fixes. Local Markdown links resolved. The local dashboard and Compose database were left running for review.
 
 At the end of the dashboard milestone, the GitHub Actions workflow was prepared but had not run remotely. Current remote results are available in [GitHub Actions](https://github.com/aggarwalpulkit596/capital-lab/actions/workflows/check.yml). The dashboard is not deployed as a public web service.
+
+## Engineering reference refactor
+
+The local `check` passed with **84 backend tests, zero failures, errors, or skipped tests**: 18 eligibility, 5 fixture, 3 configuration/policy, 4 evidence/telemetry, 6 monitoring, 22 payment integration, and 26 dashboard integration tests.
+
+Added coverage proves non-default financial terms remain consistent across quote, reservation, simulated bank, and ledger; a retry after policy replacement retains the frozen fee. Further checks cover invalid settings, configurable monitoring boundaries/explanations, out-of-order and concurrent evidence writes, read-only archives after restart, liveness/readiness, request identity, checksum drift, concurrent migration installation, and database lock timeouts.
+
+The developer browser view was inspected locally and displayed $200 principal, a 2.5% / $5 fee, and $195 net payout. Finance layout was also visually inspected. Automated desktop/mobile browser regressions are defined in `tests/browser`; their authoritative results are the corresponding GitHub Actions run, not this local backend test count.
+
+Dependency locks and SHA-256 verification metadata were generated. The subsequent normal local `check` passed with checksum enforcement. The first clean CI run then exposed missing parent/BOM metadata hidden by the warm local cache. Resolution from an empty Gradle cache added only missing metadata checksums; the reported coroutines BOM was independently compared with Maven Central. No existing checksum was changed and verification remained enabled. See the [engineering reference](engineering-reference.md) for implemented guarantees and remaining deployment work.

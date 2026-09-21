@@ -16,14 +16,14 @@ That means:
 
 ## Implemented boundaries
 
-| Component | Implementation |
-| --- | --- |
-| [AdvanceService](../src/main/kotlin/capital/payments/AdvanceService.kt) | Atomically reserves borrower/pool capacity and cash, writes the advance and outbox, revalidates before dispatch, and recovers unknown outcomes |
-| [Database](../src/main/kotlin/capital/payments/Database.kt) | Independent JDBC connections and explicit PostgreSQL transactions; no JVM mutex supplies correctness |
-| [Capital schema](../src/main/resources/db/capital.sql) | Unique request/provider keys, monetary checks, frozen payment commands, append-only balanced funding journals |
-| [HTTP bank adapter](../src/main/kotlin/capital/payments/BankGateway.kt) | Sends immutable commands and validates matching evidence; bounds the full response, including body consumption |
-| [Fake bank](../src/main/kotlin/capital/payments/FakeBankServer.kt) | Separate schema and transactions; executes once per key and debits a synthetic balance; can truncate a response after committing |
-| [Integration tests](../src/test/kotlin/capital/payments/ReservationIntegrationTest.kt) | Real PostgreSQL in Docker, concurrent clients, actual HTTP faults, separate-JVM crash, hold policy, ledger constraints, and recovery |
+| Component                                                                              | Implementation                                                                                                                                 |
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| [AdvanceService](../src/main/kotlin/capital/payments/AdvanceService.kt)                | Atomically reserves borrower/pool capacity and cash, writes the advance and outbox, revalidates before dispatch, and recovers unknown outcomes |
+| [Database](../src/main/kotlin/capital/payments/Database.kt)                            | Independent JDBC connections and explicit PostgreSQL transactions; no JVM mutex supplies correctness                                           |
+| [Capital schema](../src/main/resources/db/capital.sql)                                 | Unique request/provider keys, monetary checks, frozen payment commands, append-only balanced funding journals                                  |
+| [HTTP bank adapter](../src/main/kotlin/capital/payments/BankGateway.kt)                | Sends immutable commands and validates matching evidence; bounds the full response, including body consumption                                 |
+| [Fake bank](../src/main/kotlin/capital/payments/FakeBankServer.kt)                     | Separate schema and transactions; executes once per key and debits a synthetic balance; can truncate a response after committing               |
+| [Integration tests](../src/test/kotlin/capital/payments/ReservationIntegrationTest.kt) | Real PostgreSQL in Docker, concurrent clients, actual HTTP faults, separate-JVM crash, hold policy, ledger constraints, and recovery           |
 
 The app and fake bank share a PostgreSQL server for convenience, but use separate schemas and connection transactions. App rollback cannot undo the bank's committed transfer. This is failure-boundary isolation, not a claim of production security isolation between database principals.
 
@@ -59,12 +59,12 @@ A failure anywhere in that transaction rolls back all four steps. The bank effec
 
 With $1,000 in proceeds, $600 already advanced, and $1,000 synthetic funding cash:
 
-| Step | Local state | Reserved principal | Reserved cash | Bank transfers | New funding journals |
-| --- | --- | ---: | ---: | ---: | ---: |
-| Reserve another $200 principal | READY | $200 | $195 | 0 | 0 |
-| Bank pays $195, then truncates HTTP response | UNKNOWN | $200 | $195 | 1 | 0 |
-| New risk hold; query finds the existing transfer | SETTLED | $0 | $0 | 1 | 1 |
-| Replay the already-completed operation | SETTLED | $0 | $0 | 1 | 1 |
+| Step                                             | Local state | Reserved principal | Reserved cash | Bank transfers | New funding journals |
+| ------------------------------------------------ | ----------- | -----------------: | ------------: | -------------: | -------------------: |
+| Reserve another $200 principal                   | READY       |               $200 |          $195 |              0 |                    0 |
+| Bank pays $195, then truncates HTTP response     | UNKNOWN     |               $200 |          $195 |              1 |                    0 |
+| New risk hold; query finds the existing transfer | SETTLED     |                 $0 |            $0 |              1 |                    1 |
+| Replay the already-completed operation           | SETTLED     |                 $0 |            $0 |              1 |                    1 |
 
 The bank and local cash controls then show $805. Total outstanding principal is $800. The new journal has $200 debit and $195 + $5 credits. Fee recognition beyond deferral is outside this slice.
 

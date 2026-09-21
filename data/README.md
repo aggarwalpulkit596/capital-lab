@@ -2,7 +2,7 @@
 
 The dashboard includes **305 observed days** derived from Daqing Chen's [Online Retail dataset at UCI](https://archive.ics.uci.edu/dataset/352/online+retail). The original workbook contains 541,909 transaction lines from a UK online retailer, December 2010–December 2011. Source currency is GBP.
 
-Citation: Chen, D. (2015). *Online Retail* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33.
+Citation: Chen, D. (2015). _Online Retail_ [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33.
 
 The source and bundled derived aggregates use [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), separately from the project's Apache 2.0 code license. See [NOTICE](../NOTICE).
 

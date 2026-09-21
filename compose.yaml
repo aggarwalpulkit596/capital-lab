@@ -6,11 +6,11 @@ services:
       POSTGRES_USER: capital_lab
       POSTGRES_PASSWORD: local_demo_only
     ports:
-      - "127.0.0.1:55432:5432"
+      - '127.0.0.1:55432:5432'
     volumes:
       - capital_lab_pg:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U capital_lab -d capital_lab"]
+      test: ['CMD-SHELL', 'pg_isready -U capital_lab -d capital_lab']
       interval: 2s
       timeout: 2s
       retries: 20

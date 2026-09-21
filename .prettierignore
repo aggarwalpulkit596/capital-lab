@@ -1,0 +1,15 @@
+build/
+output/
+.gradle/
+.gradle-user-home/
+.kotlin/
+.idea/
+node_modules/
+data/raw/
+src/main/resources/data/
+docs/q5-draft.md
+docs/session-log.md
+gradle/verification-metadata.xml
+package-lock.json
+playwright-report/
+test-results/

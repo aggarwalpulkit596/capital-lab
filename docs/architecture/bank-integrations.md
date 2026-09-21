@@ -10,16 +10,16 @@ The domain owns eligibility, holds, principal/fee calculation, payment intent, a
 
 ## Provider capability contract
 
-| Capability | Must be established before enabling it |
-| --- | --- |
-| Business onboarding | Required entity/owner data, approval lifecycle, prohibited activities, responsibility split, review and suspension events |
-| Account structure | Ownership, permitted funds use, collection-account attribution, reporting access, account closure behavior |
-| Beneficiary verification | Verification evidence, versioning, allowed payout destinations, changes and re-approval |
-| Transfer idempotency | Scope, payload mismatch behavior, retention duration, cross-endpoint behavior, duplicate-request response |
-| Unknown-result recovery | Safe retry semantics, lookup by operation/reference, retention and consistency of lookup results |
-| Rail execution | Currency, cutoff timezone, holidays, settlement definition, cancellation window, returns/reversals, limits, fees |
-| Evidence | Authenticated callbacks, event IDs, posted transaction IDs, pagination, statement/report availability and revisions |
-| Availability | Rate limits, outage procedures, sandbox fidelity, support escalation and exception SLAs |
+| Capability               | Must be established before enabling it                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Business onboarding      | Required entity/owner data, approval lifecycle, prohibited activities, responsibility split, review and suspension events |
+| Account structure        | Ownership, permitted funds use, collection-account attribution, reporting access, account closure behavior                |
+| Beneficiary verification | Verification evidence, versioning, allowed payout destinations, changes and re-approval                                   |
+| Transfer idempotency     | Scope, payload mismatch behavior, retention duration, cross-endpoint behavior, duplicate-request response                 |
+| Unknown-result recovery  | Safe retry semantics, lookup by operation/reference, retention and consistency of lookup results                          |
+| Rail execution           | Currency, cutoff timezone, holidays, settlement definition, cancellation window, returns/reversals, limits, fees          |
+| Evidence                 | Authenticated callbacks, event IDs, posted transaction IDs, pagination, statement/report availability and revisions       |
+| Availability             | Rate limits, outage procedures, sandbox fidelity, support escalation and exception SLAs                                   |
 
 If safe retry and reliable recovery are unavailable, automatically executing ambiguous operations is a launch blocker. Do not switch banks to retry a possibly executed payment; cross-provider idempotency does not exist just because each provider supports a key.
 
