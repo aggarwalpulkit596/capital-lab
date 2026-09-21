@@ -134,4 +134,6 @@ The suite was mutation-checked. Replacing the fraud verdict fold so that a later
 
 Division by zero is exercised rather than assumed: a developer with no observed sales yields a zero refund rate and zero volatility instead of failing, and an absent baseline cannot fire the revenue-spike rule.
 
+The first remote CI run on this branch passed `test` (backend and integration), `browser`, `presentation`, and CodeQL for both `java-kotlin` and `javascript-typescript`. The `dependency-review` job failed, not on the diff but because this repository has no dependency graph: the action errors out entirely when that setting is off, which would have put a permanent red X on every pull request for a repository setting. The job now probes the dependency-graph API first and emits a warning annotation when it is unavailable, so a real finding stays distinguishable from a check that could not run. Enabling the dependency graph under Settings > Security & analysis turns the real check on with no further change.
+
 The underwriting route was verified to enforce the same tenancy boundary as every other route, and a recorded chargeback revision was confirmed to drive both the abuse verdict to BLOCK and the advance rate below base, so the settlement and underwriting paths are reading the same rows.
