@@ -26,6 +26,11 @@ published library API.
 - **Versioned tenant API** at `/v1` with API-key authentication, per-developer tenancy, ordered
   READ/WRITE/OPERATOR scopes, and an OpenAPI 3.1 contract served from the checked-in resource.
   Facts originating outside the developer require OPERATOR scope.
+- **Risk-based underwriting.** An advance rate derived from observed refund and chargeback rate,
+  tenure, and dispersion of daily gross, replacing a flat rate for every developer; portfolio
+  concentration and velocity caps; a step-up ladder on fully repaid pools; and an abuse rule set
+  returning ALLOW/REVIEW/BLOCK with the numbers each signal fired on. Advisory only — nothing here
+  changes a limit or blocks a payout. See [docs/underwriting.md](docs/underwriting.md).
 - `AdvanceService.available`, a non-binding capacity quote with the policy evidence behind it.
 
 - `--help` / `-h` on the packaged calculator, documenting the fixture argument, the default fixture

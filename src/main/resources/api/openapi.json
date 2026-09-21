@@ -5,29 +5,65 @@
     "version": "1.0.0",
     "summary": "Local teaching API for app-store receivables financing.",
     "description": "All money is synthetic and this server binds to loopback only. Amounts are USD cents as integers; no endpoint accepts a fractional amount. The developer is always resolved from the API key, never from a path or body field, so a key cannot address another tenant's pools.\n\nScopes are ordered READ < WRITE < OPERATOR. OPERATOR is required for facts that originate outside the developer (a store remitting money, a refund revising proceeds, a bank returning a transfer), because a developer must not be able to assert that a store paid them.",
-    "license": { "name": "Apache-2.0", "identifier": "Apache-2.0" }
+    "license": {
+      "name": "Apache-2.0",
+      "identifier": "Apache-2.0"
+    }
   },
-  "servers": [{ "url": "http://127.0.0.1:8082", "description": "Local lab" }],
-  "security": [{ "apiKey": [] }],
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8082",
+      "description": "Local lab"
+    }
+  ],
+  "security": [
+    {
+      "apiKey": []
+    }
+  ],
   "tags": [
-    { "name": "Position", "description": "What the developer currently owes and can draw." },
-    { "name": "Advances", "description": "Requesting and inspecting advances." },
-    { "name": "Automation", "description": "Automatic payout policy and cycles." },
-    { "name": "Settlement", "description": "Store money, refunds, returns, and residual release." }
+    {
+      "name": "Position",
+      "description": "What the developer currently owes and can draw."
+    },
+    {
+      "name": "Advances",
+      "description": "Requesting and inspecting advances."
+    },
+    {
+      "name": "Automation",
+      "description": "Automatic payout policy and cycles."
+    },
+    {
+      "name": "Settlement",
+      "description": "Store money, refunds, returns, and residual release."
+    },
+    {
+      "name": "Underwriting",
+      "description": "Illustrative risk model output. Advisory only."
+    }
   ],
   "paths": {
     "/v1/health": {
       "get": {
         "summary": "Liveness",
         "security": [],
-        "responses": { "200": { "description": "The process is up." } }
+        "responses": {
+          "200": {
+            "description": "The process is up."
+          }
+        }
       }
     },
     "/v1/openapi.json": {
       "get": {
         "summary": "This document",
         "security": [],
-        "responses": { "200": { "description": "The OpenAPI description of this API." } }
+        "responses": {
+          "200": {
+            "description": "The OpenAPI description of this API."
+          }
+        }
       }
     },
     "/v1/portfolio": {
@@ -40,12 +76,18 @@
             "description": "The developer's position.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Portfolio" }
+                "schema": {
+                  "$ref": "#/components/schemas/Portfolio"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthenticated" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
@@ -59,7 +101,9 @@
             "name": "poolId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -67,12 +111,18 @@
             "description": "Current availability with its evidence.",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Availability" }
+                "schema": {
+                  "$ref": "#/components/schemas/Availability"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthenticated" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
@@ -86,7 +136,10 @@
             "name": "Idempotency-Key",
             "in": "header",
             "required": true,
-            "schema": { "type": "string", "maxLength": 200 }
+            "schema": {
+              "type": "string",
+              "maxLength": 200
+            }
           }
         ],
         "requestBody": {
@@ -97,8 +150,13 @@
                 "type": "object",
                 "required": ["poolId", "principalCents"],
                 "properties": {
-                  "poolId": { "type": "string" },
-                  "principalCents": { "type": "integer", "minimum": 1 }
+                  "poolId": {
+                    "type": "string"
+                  },
+                  "principalCents": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
                 }
               }
             }
@@ -108,11 +166,19 @@
           "201": {
             "description": "Capacity reserved and a dispatch intent recorded.",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/Advance" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Advance"
+                }
+              }
             }
           },
-          "400": { "$ref": "#/components/responses/BadRequest" },
-          "403": { "$ref": "#/components/responses/InsufficientScope" },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
           "409": {
             "description": "The idempotency key is already bound to a different request."
           },
@@ -131,17 +197,26 @@
             "name": "advanceId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" }
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "The advance.",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/Advance" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Advance"
+                }
+              }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
@@ -155,7 +230,10 @@
             "name": "advanceId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" }
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "requestBody": {
@@ -180,7 +258,9 @@
           "200": {
             "description": "REVERSED, ALREADY_REVERSED, or REJECTED with an explanation."
           },
-          "403": { "$ref": "#/components/responses/InsufficientScope" }
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          }
         }
       }
     },
@@ -192,10 +272,16 @@
           "200": {
             "description": "The configured policy.",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/PayoutPolicy" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutPolicy"
+                }
+              }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       },
       "put": {
@@ -206,13 +292,19 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/PayoutPolicy" }
+              "schema": {
+                "$ref": "#/components/schemas/PayoutPolicy"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "The stored policy." },
-          "400": { "$ref": "#/components/responses/BadRequest" }
+          "200": {
+            "description": "The stored policy."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
         }
       }
     },
@@ -225,7 +317,11 @@
           "200": {
             "description": "RAN, ALREADY_RAN, PAUSED, NOT_AUTOMATIC, or NO_POLICY.",
             "content": {
-              "application/json": { "schema": { "$ref": "#/components/schemas/CycleResult" } }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CycleResult"
+                }
+              }
             }
           }
         }
@@ -240,7 +336,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Remittance" }
+              "schema": {
+                "$ref": "#/components/schemas/Remittance"
+              }
             }
           }
         },
@@ -248,8 +346,12 @@
           "200": {
             "description": "APPLIED, PARTIALLY_APPLIED, ALREADY_APPLIED, or REJECTED."
           },
-          "403": { "$ref": "#/components/responses/InsufficientScope" },
-          "409": { "description": "The same id was presented with a different amount." }
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "409": {
+            "description": "The same id was presented with a different amount."
+          }
         }
       }
     },
@@ -262,7 +364,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ProceedsRevision" }
+              "schema": {
+                "$ref": "#/components/schemas/ProceedsRevision"
+              }
             }
           }
         },
@@ -270,7 +374,9 @@
           "200": {
             "description": "WITHIN_LIMIT, RECLASSIFIED, ALREADY_APPLIED, or REJECTED."
           },
-          "403": { "$ref": "#/components/responses/InsufficientScope" }
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          }
         }
       }
     },
@@ -286,7 +392,11 @@
               "schema": {
                 "type": "object",
                 "required": ["payoutId"],
-                "properties": { "payoutId": { "type": "string" } }
+                "properties": {
+                  "payoutId": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -294,6 +404,52 @@
         "responses": {
           "200": {
             "description": "PAID, FULLY_RECOVERED, NOTHING_PAYABLE, ALREADY_PAID, or REJECTED."
+          }
+        }
+      }
+    },
+    "/v1/pools/{poolId}/underwriting": {
+      "get": {
+        "tags": ["Underwriting"],
+        "summary": "Risk assessment for this pool",
+        "description": "Derives an advance rate from observed history (refund and chargeback rate, tenure, dispersion of daily gross), applies portfolio caps (concentration above a size floor, and velocity against observed gross), and runs the abuse rule set.\n\nAdvisory only. Nothing here changes a limit or blocks a payout; the authoritative controls are enforced under lock in the reservation path. Every threshold is illustrative and chosen to make the mechanism legible, not fitted to outcomes: a real advance rate needs observed repayment performance, a credit owner, and a model risk review.",
+        "parameters": [
+          {
+            "name": "poolId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "requestedCents",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "The amount to assess the portfolio caps and abuse rules against."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The assessment, with the factors behind every number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnderwritingAssessment"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         }
       }
@@ -311,25 +467,41 @@
       "Unauthenticated": {
         "description": "No usable API key was presented.",
         "content": {
-          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
         }
       },
       "InsufficientScope": {
         "description": "The key is valid but lacks the scope this route requires.",
         "content": {
-          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
         }
       },
       "NotFound": {
         "description": "No such resource for this developer.",
         "content": {
-          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
         }
       },
       "BadRequest": {
         "description": "The request was malformed or a field was unusable.",
         "content": {
-          "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
         }
       }
     },
@@ -340,9 +512,15 @@
           "error": {
             "type": "object",
             "properties": {
-              "code": { "type": "string" },
-              "message": { "type": "string" },
-              "requestId": { "type": "string" }
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              }
             }
           }
         }
@@ -350,46 +528,92 @@
       "PoolPosition": {
         "type": "object",
         "properties": {
-          "poolId": { "type": "string" },
-          "netProceedsCents": { "type": "integer" },
-          "settledProceedsCents": { "type": "integer" },
-          "fundedLifetimeCents": { "type": "integer" },
-          "outstandingCents": { "type": "integer" },
-          "reservedCents": { "type": "integer" },
-          "openRecoveryCents": { "type": "integer" },
-          "closed": { "type": "boolean" }
+          "poolId": {
+            "type": "string"
+          },
+          "netProceedsCents": {
+            "type": "integer"
+          },
+          "settledProceedsCents": {
+            "type": "integer"
+          },
+          "fundedLifetimeCents": {
+            "type": "integer"
+          },
+          "outstandingCents": {
+            "type": "integer"
+          },
+          "reservedCents": {
+            "type": "integer"
+          },
+          "openRecoveryCents": {
+            "type": "integer"
+          },
+          "closed": {
+            "type": "boolean"
+          }
         }
       },
       "Portfolio": {
         "type": "object",
         "properties": {
-          "developerId": { "type": "string" },
-          "limitCents": { "type": "integer" },
-          "outstandingCents": { "type": "integer" },
-          "reservedCents": { "type": "integer" },
-          "headroomCents": { "type": "integer" },
-          "payableCents": { "type": "integer" },
-          "openRecoveryCents": { "type": "integer" },
-          "fundedLifetimeCents": { "type": "integer" },
-          "onHold": { "type": "boolean" },
-          "openPools": { "type": "integer" },
+          "developerId": {
+            "type": "string"
+          },
+          "limitCents": {
+            "type": "integer"
+          },
+          "outstandingCents": {
+            "type": "integer"
+          },
+          "reservedCents": {
+            "type": "integer"
+          },
+          "headroomCents": {
+            "type": "integer"
+          },
+          "payableCents": {
+            "type": "integer"
+          },
+          "openRecoveryCents": {
+            "type": "integer"
+          },
+          "fundedLifetimeCents": {
+            "type": "integer"
+          },
+          "onHold": {
+            "type": "boolean"
+          },
+          "openPools": {
+            "type": "integer"
+          },
           "largestPoolShareBasisPoints": {
             "type": "integer",
             "description": "Share of outstanding principal in the single largest pool. Reported as an observation; nothing acts on it."
           },
           "positions": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/PoolPosition" }
+            "items": {
+              "$ref": "#/components/schemas/PoolPosition"
+            }
           }
         }
       },
       "Availability": {
         "type": "object",
         "properties": {
-          "poolId": { "type": "string" },
-          "principalCents": { "type": "integer" },
-          "feeCents": { "type": "integer" },
-          "netCashCents": { "type": "integer" },
+          "poolId": {
+            "type": "string"
+          },
+          "principalCents": {
+            "type": "integer"
+          },
+          "feeCents": {
+            "type": "integer"
+          },
+          "netCashCents": {
+            "type": "integer"
+          },
           "blockedReason": {
             "type": ["string", "null"],
             "description": "RISK_HOLD, DESTINATION_CHANGED, POOL_CLOSED, or REPORT_COVERAGE_BEHIND."
@@ -403,11 +627,22 @@
       "Advance": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "format": "uuid" },
-          "poolId": { "type": "string" },
-          "principalCents": { "type": "integer" },
-          "feeCents": { "type": "integer" },
-          "cashCents": { "type": "integer" },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "poolId": {
+            "type": "string"
+          },
+          "principalCents": {
+            "type": "integer"
+          },
+          "feeCents": {
+            "type": "integer"
+          },
+          "cashCents": {
+            "type": "integer"
+          },
           "state": {
             "type": "string",
             "enum": [
@@ -420,15 +655,22 @@
               "RETURNED"
             ]
           },
-          "bankTransferId": { "type": ["string", "null"] },
-          "lastReason": { "type": ["string", "null"] }
+          "bankTransferId": {
+            "type": ["string", "null"]
+          },
+          "lastReason": {
+            "type": ["string", "null"]
+          }
         }
       },
       "PayoutPolicy": {
         "type": "object",
         "required": ["mode", "minimumCents"],
         "properties": {
-          "mode": { "type": "string", "enum": ["MANUAL", "AUTOMATIC"] },
+          "mode": {
+            "type": "string",
+            "enum": ["MANUAL", "AUTOMATIC"]
+          },
           "minimumCents": {
             "type": "integer",
             "minimum": 0,
@@ -439,22 +681,38 @@
             "minimum": 0,
             "description": "Per-cycle cap independent of policy capacity. 0 means no extra cap."
           },
-          "cadence": { "type": "string", "enum": ["DAILY", "WEEKLY"] },
-          "paused": { "type": "boolean" }
+          "cadence": {
+            "type": "string",
+            "enum": ["DAILY", "WEEKLY"]
+          },
+          "paused": {
+            "type": "boolean"
+          }
         }
       },
       "PoolDecision": {
         "type": "object",
         "properties": {
-          "poolId": { "type": "string" },
+          "poolId": {
+            "type": "string"
+          },
           "outcome": {
             "type": "string",
             "enum": ["REQUESTED", "BELOW_MINIMUM", "NO_CAPACITY", "BLOCKED", "FAILED"]
           },
-          "availableCents": { "type": "integer" },
-          "requestedCents": { "type": "integer" },
-          "advanceId": { "type": ["string", "null"], "format": "uuid" },
-          "reason": { "type": ["string", "null"] }
+          "availableCents": {
+            "type": "integer"
+          },
+          "requestedCents": {
+            "type": "integer"
+          },
+          "advanceId": {
+            "type": ["string", "null"],
+            "format": "uuid"
+          },
+          "reason": {
+            "type": ["string", "null"]
+          }
         }
       },
       "CycleResult": {
@@ -464,23 +722,42 @@
             "type": "string",
             "enum": ["RAN", "ALREADY_RAN", "NOT_AUTOMATIC", "PAUSED", "NO_POLICY"]
           },
-          "cycleId": { "type": ["string", "null"] },
-          "cycleDate": { "type": ["string", "null"], "format": "date" },
+          "cycleId": {
+            "type": ["string", "null"]
+          },
+          "cycleDate": {
+            "type": ["string", "null"],
+            "format": "date"
+          },
           "decisions": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/PoolDecision" }
+            "items": {
+              "$ref": "#/components/schemas/PoolDecision"
+            }
           },
-          "explanation": { "type": "string" }
+          "explanation": {
+            "type": "string"
+          }
         }
       },
       "Remittance": {
         "type": "object",
         "required": ["remittanceId", "store", "developerId", "receivedCents", "lines"],
         "properties": {
-          "remittanceId": { "type": "string" },
-          "store": { "type": "string", "examples": ["apple", "google"] },
-          "developerId": { "type": "string" },
-          "receivedCents": { "type": "integer", "minimum": 1 },
+          "remittanceId": {
+            "type": "string"
+          },
+          "store": {
+            "type": "string",
+            "examples": ["apple", "google"]
+          },
+          "developerId": {
+            "type": "string"
+          },
+          "receivedCents": {
+            "type": "integer",
+            "minimum": 1
+          },
           "lines": {
             "type": "array",
             "minItems": 1,
@@ -489,8 +766,13 @@
               "type": "object",
               "required": ["poolId", "cents"],
               "properties": {
-                "poolId": { "type": "string" },
-                "cents": { "type": "integer", "minimum": 1 },
+                "poolId": {
+                  "type": "string"
+                },
+                "cents": {
+                  "type": "integer",
+                  "minimum": 1
+                },
                 "final": {
                   "type": "boolean",
                   "description": "The store declaring this is the last money for that pool. Not an assertion that principal was repaid."
@@ -504,13 +786,180 @@
         "type": "object",
         "required": ["revisionId", "poolId", "reason", "reductionCents"],
         "properties": {
-          "revisionId": { "type": "string" },
-          "poolId": { "type": "string" },
+          "revisionId": {
+            "type": "string"
+          },
+          "poolId": {
+            "type": "string"
+          },
           "reason": {
             "type": "string",
             "enum": ["REFUND", "CHARGEBACK", "STORE_ADJUSTMENT"]
           },
-          "reductionCents": { "type": "integer", "minimum": 1 }
+          "reductionCents": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "RateFactor": {
+        "type": "object",
+        "description": "One named contribution to the advance rate, so a rate can always be explained.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": ["REFUND_RATE", "SHORT_HISTORY", "VOLATILE_SALES", "FLOOR_APPLIED"]
+          },
+          "deltaBasisPoints": {
+            "type": "integer"
+          },
+          "explanation": {
+            "type": "string"
+          }
+        }
+      },
+      "Constraint": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": ["CONCENTRATION", "VELOCITY"]
+          },
+          "permittedCents": {
+            "type": "integer"
+          },
+          "explanation": {
+            "type": "string"
+          }
+        }
+      },
+      "FraudSignal": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "RECENT_DESTINATION_CHANGE",
+              "REVENUE_SPIKE",
+              "NEW_ACCOUNT_LARGE_REQUEST",
+              "POST_FUNDING_REFUND_SPIKE",
+              "CHARGEBACK_LEVEL"
+            ]
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["ALLOW", "REVIEW", "BLOCK"]
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "object",
+            "description": "The numbers this signal fired on, so the decision can be re-derived."
+          }
+        }
+      },
+      "UnderwritingAssessment": {
+        "type": "object",
+        "properties": {
+          "poolId": {
+            "type": "string"
+          },
+          "policyVersion": {
+            "type": "string"
+          },
+          "advisory": {
+            "type": "string"
+          },
+          "observation": {
+            "type": "object",
+            "description": "Observed history. A missing day is a shorter window, never a zero.",
+            "properties": {
+              "tenureDays": {
+                "type": "integer"
+              },
+              "grossCents": {
+                "type": "integer"
+              },
+              "refundCents": {
+                "type": "integer"
+              },
+              "chargebackCents": {
+                "type": "integer"
+              },
+              "refundRateBasisPoints": {
+                "type": "integer"
+              },
+              "volatilityBasisPoints": {
+                "type": "integer"
+              },
+              "repaidPools": {
+                "type": "integer"
+              }
+            }
+          },
+          "advanceRate": {
+            "type": "object",
+            "properties": {
+              "basisPoints": {
+                "type": "integer"
+              },
+              "baseBasisPoints": {
+                "type": "integer"
+              },
+              "factors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RateFactor"
+                }
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          },
+          "exposure": {
+            "type": "object",
+            "properties": {
+              "requestedCents": {
+                "type": "integer"
+              },
+              "permittedCents": {
+                "type": "integer"
+              },
+              "constraints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Constraint"
+                }
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          },
+          "fraud": {
+            "type": "object",
+            "properties": {
+              "verdict": {
+                "type": "string",
+                "enum": ["ALLOW", "REVIEW", "BLOCK"]
+              },
+              "signals": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FraudSignal"
+                }
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          },
+          "steppedLimitCents": {
+            "type": "integer",
+            "description": "Base limit plus credit earned by fully repaid pools, capped."
+          }
         }
       }
     }

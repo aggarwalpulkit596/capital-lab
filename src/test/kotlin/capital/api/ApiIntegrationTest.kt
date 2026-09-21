@@ -307,6 +307,63 @@ class ApiIntegrationTest {
     }
 
     @Test
+    fun `underwriting explains the rate, the caps, and the abuse rules`() {
+        val (status, body) =
+            call("GET", "/v1/pools/pool-a/underwriting?requestedCents=100000", readKey)
+        assertEquals(200, status)
+        assertEquals("illustrative-underwriting-v1", body["policyVersion"].asString)
+        assertTrue(body["advisory"].asString.contains("Nothing here changes a limit"))
+
+        // One pool, dated at the expected reporting period, so history is short by construction.
+        val rate = body.getAsJsonObject("advanceRate")
+        assertEquals(8_000, rate["baseBasisPoints"].asInt)
+        assertTrue(rate["basisPoints"].asInt <= rate["baseBasisPoints"].asInt)
+        assertTrue(rate.getAsJsonArray("factors").size() > 0)
+        assertTrue(rate["explanation"].asString.contains("SHORT_HISTORY"))
+
+        // Both portfolio caps are reported so the binding one is identifiable.
+        val codes =
+            body
+                .getAsJsonObject("exposure")
+                .getAsJsonArray("constraints")
+                .map { it.asJsonObject["code"].asString }
+                .toSet()
+        assertEquals(setOf("CONCENTRATION", "VELOCITY"), codes)
+
+        assertEquals("ALLOW", body.getAsJsonObject("fraud")["verdict"].asString)
+    }
+
+    @Test
+    fun `recorded chargebacks turn the underwriting verdict into a block`() {
+        database.transaction { c ->
+            c.update(
+                """INSERT INTO proceeds_revisions(id,pool_id,reason,reduction_cents,proceeds_before_cents,
+                    proceeds_after_cents,reclassified_cents,created_at)
+                    VALUES ('rev-1','pool-a','CHARGEBACK',?,?,?,0,?)""",
+                150_000,
+                500_000,
+                350_000,
+                clock.instant(),
+            )
+        }
+        val (status, body) = call("GET", "/v1/pools/pool-a/underwriting", readKey)
+        assertEquals(200, status)
+        val fraud = body.getAsJsonObject("fraud")
+        assertEquals("BLOCK", fraud["verdict"].asString)
+        assertEquals(
+            "CHARGEBACK_LEVEL",
+            fraud.getAsJsonArray("signals")[0].asJsonObject["code"].asString,
+        )
+        // The rate falls too: 30% of gross is well past the worst refund band.
+        assertTrue(body.getAsJsonObject("advanceRate")["basisPoints"].asInt < 8_000)
+    }
+
+    @Test
+    fun `underwriting respects the same tenancy boundary as every other route`() {
+        assertEquals(404, call("GET", "/v1/pools/pool-a/underwriting", otherKey).first)
+    }
+
+    @Test
     fun `payout policy round-trips and drives a cycle`() {
         val (putStatus, _) =
             call(

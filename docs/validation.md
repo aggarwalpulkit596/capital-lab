@@ -120,3 +120,18 @@ Four defects were found by these tests and fixed rather than worked around:
 Tenancy and provenance were tested as behavior, not as configuration: a key for one developer requesting another developer's pool receives `404` rather than `403`, so it cannot learn the pool exists; a WRITE key is refused when it attempts to assert that a store remitted money, while an OPERATOR key succeeds on the identical request. Idempotency was exercised in all three directions — replay returns the original advance, a changed body under the same key conflicts, and a missing key is refused before anything is reserved.
 
 The automatic scheduler was verified to be blocked by the same controls as a manual request (risk hold and stale report coverage each produced a recorded `BLOCKED` decision and zero advances), and a weekly cadence was confirmed against the actual calendar: 2026-09-19 is a Saturday, so the following day remains in ISO week 38 and the day after opens week 39.
+
+## Risk-based underwriting
+
+The local `check` passed with **163 backend tests, zero failures, errors, or skipped tests**, adding 25 underwriting cases and 3 API cases to the previous 135. The underwriting model is pure, so its cases run without Docker and are pinned by expectations computed from the stated policy before the code ran.
+
+Two defects in the model were found by those tests and fixed rather than accommodated:
+
+- Band selection chose the harshest adjustment among matching bands. That is correct for refund rate and volatility, where a higher value is worse, but inverted for tenure, where a lower value is worse: 60 days of history was being penalised as though it were under 30. Selection is now by highest threshold reached, which is what a band partition means and is order-independent.
+- The concentration cap permitted nothing on a first advance. The arithmetic was right — any first advance puts 100% of a zero portfolio behind one pool — but a cap with no size floor refuses every new developer. The cap now binds only above a portfolio size, and a regression test asserts that a first advance is not blocked.
+
+The suite was mutation-checked. Replacing the fraud verdict fold so that a later signal overwrites an earlier one initially survived, because the only BLOCK rule is evaluated last and "most severe" was indistinguishable from "last" in the existing case. A direct order-independence test over `Verdict.escalate` was added; the same mutation then failed, and was reverted with the suite reconfirmed. The earlier settlement mutation checks were left in place.
+
+Division by zero is exercised rather than assumed: a developer with no observed sales yields a zero refund rate and zero volatility instead of failing, and an absent baseline cannot fire the revenue-spike rule.
+
+The underwriting route was verified to enforce the same tenancy boundary as every other route, and a recorded chargeback revision was confirmed to drive both the abuse verdict to BLOCK and the advance rate below base, so the settlement and underwriting paths are reading the same rows.

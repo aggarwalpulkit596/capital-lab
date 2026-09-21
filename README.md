@@ -8,7 +8,7 @@
 
 A local interactive lab for understanding app-store receivables financing: explainable eligibility, risk holds, transactional reservations, simulated bank failures, balanced journals, and reconciliation. Built with Kotlin, PostgreSQL, and a dependency-free browser interface.
 
-**20 guided scenarios · 305 public-data replay days · 135 passing backend tests · Apache 2.0 code**
+**20 guided scenarios · 305 public-data replay days · 163 passing backend tests · Apache 2.0 code**
 
 All money is synthetic. The public dataset is real retail history, with a separately attributed CC BY 4.0 license; it is not app-store or labeled fraud data. This is an independent learning project, not RevenueCat's implementation or a validated underwriting model.
 
@@ -22,6 +22,7 @@ All money is synthetic. The public dataset is real retail history, with a separa
 | Understand the numbers                  | [What the demo shows](#what-the-demo-shows)                                   |
 | Read the code                           | [Review the implementation](#review-the-implementation)                       |
 | Follow the money after it leaves        | [Lifecycle and tenant API](docs/lifecycle.md)                                 |
+| See how risk sets the rate              | [Risk-based underwriting](docs/underwriting.md)                               |
 | Know what is real and what is simulated | [Engineering reference](#engineering-reference)                               |
 | Contribute                              | [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
 
@@ -111,6 +112,7 @@ The JSON decision records preserve source inputs, policy parameters, evaluation 
 - [Store remittances, refund revisions, bank returns, residual release](src/main/kotlin/capital/settlement).
 - [Automatic payout policy and scheduler](src/main/kotlin/capital/automation/PayoutAutomation.kt).
 - [Versioned tenant API](src/main/kotlin/capital/api) and its [OpenAPI 3.1 contract](src/main/resources/api/openapi.json).
+- [Risk-based advance rate, portfolio caps, and abuse rules](src/main/kotlin/capital/underwriting).
 
 The policy uses an illustrative 80% advance rate and 2.5% fee. Limits round down; fees round half-up and are deducted from principal. The optional reporting allowance defaults to zero extra days. Expected coverage is supplied by the fixture, not calculated from Apple or Google's reporting calendars.
 
@@ -132,6 +134,7 @@ The default developer view shows principal, the fixed 2.5% fee, and net payout t
 - [Dashboard walkthrough](docs/dashboard.md)
 - [Public dataset and transformations](data/README.md)
 - [Post-disbursement lifecycle and tenant API](docs/lifecycle.md)
+- [Risk-based underwriting](docs/underwriting.md)
 - [Local deployment boundary](SECURITY.md)
 - [Release history](CHANGELOG.md)
 

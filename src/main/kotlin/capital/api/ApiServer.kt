@@ -20,6 +20,7 @@ import capital.settlement.RemittanceLine
 import capital.settlement.RemittanceService
 import capital.settlement.ResidualPayoutService
 import capital.settlement.RevisionReason
+import capital.underwriting.UnderwritingService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonIOException
@@ -82,6 +83,7 @@ class ApiServer(
     private val advances = AdvanceService(database, clock, expectedReportThrough)
     private val scheduler = PayoutScheduler(database, advances, clock)
     private val portfolio = PortfolioView(database)
+    private val underwriting = UnderwritingService(database, clock)
     private val remittances = RemittanceService(database, clock)
     private val revisions = ProceedsRevisionService(database, clock)
     private val returns = AdvanceReturnService(database, clock)
@@ -188,6 +190,64 @@ class ApiServer(
         val rest = segments.drop(1)
 
         return when {
+            rest.size == 3 &&
+                rest[0] == "pools" &&
+                rest[2] == "underwriting" &&
+                method == "GET" -> {
+                need(principal, Scope.READ)
+                requireOwnedPool(principal, rest[1])
+                val requested =
+                    exchange.requestURI.query
+                        ?.split('&')
+                        ?.firstOrNull { it.startsWith("requestedCents=") }
+                        ?.substringAfter('=')
+                        ?.toLongOrNull() ?: 0L
+                val assessment =
+                    underwriting.assess(principal.developerId, rest[1], requested)
+                        ?: throw ApiError(404, "NOT_FOUND", "No such pool for this developer")
+                200 to
+                    mapOf(
+                        "poolId" to rest[1],
+                        "policyVersion" to assessment.policyVersion,
+                        "advisory" to
+                            "Illustrative model output. Nothing here changes a limit or blocks a payout; " +
+                                "the authoritative controls are enforced in the reservation path.",
+                        "observation" to
+                            mapOf(
+                                "tenureDays" to assessment.observation.tenureDays,
+                                "grossCents" to assessment.observation.grossCents,
+                                "refundCents" to assessment.observation.refundCents,
+                                "chargebackCents" to assessment.observation.chargebackCents,
+                                "refundRateBasisPoints" to
+                                    assessment.observation.refundRateBasisPoints,
+                                "volatilityBasisPoints" to
+                                    assessment.observation.volatilityBasisPoints,
+                                "repaidPools" to assessment.observation.repaidPools,
+                            ),
+                        "advanceRate" to
+                            mapOf(
+                                "basisPoints" to assessment.rate.basisPoints,
+                                "baseBasisPoints" to assessment.rate.baseBasisPoints,
+                                "factors" to assessment.rate.factors,
+                                "explanation" to assessment.rate.explanation,
+                            ),
+                        "exposure" to
+                            mapOf(
+                                "requestedCents" to assessment.exposure.requestedCents,
+                                "permittedCents" to assessment.exposure.permittedCents,
+                                "constraints" to assessment.exposure.constraints,
+                                "explanation" to assessment.exposure.explanation,
+                            ),
+                        "fraud" to
+                            mapOf(
+                                "verdict" to assessment.fraud.verdict,
+                                "signals" to assessment.fraud.signals,
+                                "explanation" to assessment.fraud.explanation,
+                            ),
+                        "steppedLimitCents" to assessment.steppedLimitCents,
+                    )
+            }
+
             rest == listOf("portfolio") && method == "GET" -> {
                 need(principal, Scope.READ)
                 val view =
