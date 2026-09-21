@@ -1,10 +1,39 @@
 # Capital Lab
 
+[![Check](https://github.com/aggarwalpulkit596/capital-lab/actions/workflows/check.yml/badge.svg)](https://github.com/aggarwalpulkit596/capital-lab/actions/workflows/check.yml)
+[![CodeQL](https://github.com/aggarwalpulkit596/capital-lab/actions/workflows/codeql.yml/badge.svg)](https://github.com/aggarwalpulkit596/capital-lab/actions/workflows/codeql.yml)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![JDK 17](https://img.shields.io/badge/JDK-17-orange.svg)](https://adoptium.net/temurin/releases/?version=17)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.1.21-7F52FF.svg)](https://kotlinlang.org)
+
 A local interactive lab for understanding app-store receivables financing: explainable eligibility, risk holds, transactional reservations, simulated bank failures, balanced journals, and reconciliation. Built with Kotlin, PostgreSQL, and a dependency-free browser interface.
 
-**20 guided scenarios · 305 public-data replay days · 84 passing backend tests · Apache 2.0 code**
+**20 guided scenarios · 305 public-data replay days · 135 passing backend tests · Apache 2.0 code**
 
 All money is synthetic. The public dataset is real retail history, with a separately attributed CC BY 4.0 license; it is not app-store or labeled fraud data. This is an independent learning project, not RevenueCat's implementation or a validated underwriting model.
+
+## Contents
+
+| I want to…                              | Go to                                                                         |
+| --------------------------------------- | ----------------------------------------------------------------------------- |
+| See it running in five minutes          | [Interactive dashboard](#interactive-dashboard)                               |
+| Learn the domain from slides            | [Learning presentation](#learning-presentation)                               |
+| Run the tests and the calculator        | [Run the backend](#run-the-backend)                                           |
+| Understand the numbers                  | [What the demo shows](#what-the-demo-shows)                                   |
+| Read the code                           | [Review the implementation](#review-the-implementation)                       |
+| Follow the money after it leaves        | [Lifecycle and tenant API](docs/lifecycle.md)                                 |
+| Know what is real and what is simulated | [Engineering reference](#engineering-reference)                               |
+| Contribute                              | [CONTRIBUTING.md](CONTRIBUTING.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) |
+
+## Requirements
+
+| Tool   | Version | Needed for                                                 |
+| ------ | ------- | ---------------------------------------------------------- |
+| JDK    | 17      | Everything. The Gradle wrapper pins the build tool itself. |
+| Docker | any     | Dashboard, integration tests, and the payment demo.        |
+| Node   | 24      | Slide deck, browser tests, and formatting only.            |
+
+Nothing else is installed globally, and the dashboard has no runtime JavaScript dependencies.
 
 ## Interactive dashboard
 
@@ -51,10 +80,11 @@ Build and run the packaged calculator:
 
 ```sh
 ./gradlew installDist
+build/install/advance-eligibility-lab/bin/advance-eligibility-lab --help
 build/install/advance-eligibility-lab/bin/advance-eligibility-lab
 ```
 
-An optional argument to the packaged executable selects a different fixture JSON file. Run from this directory to use the default fixture path.
+An optional argument selects a different fixture JSON file; run from this directory to use the default path. Decision records go to stdout as a JSON array, so the output pipes into `jq`. Unusable input is reported on stderr as one explanatory line naming the offending field, and exits with status 1; a wrong argument count exits with status 2.
 
 ## What the demo shows
 
@@ -78,6 +108,9 @@ The JSON decision records preserve source inputs, policy parameters, evaluation 
 - [Transactional reservation and recovery service](src/main/kotlin/capital/payments/AdvanceService.kt).
 - [HTTP bank simulator](src/main/kotlin/capital/payments/FakeBankServer.kt).
 - [PostgreSQL integration tests](src/test/kotlin/capital/payments/ReservationIntegrationTest.kt).
+- [Store remittances, refund revisions, bank returns, residual release](src/main/kotlin/capital/settlement).
+- [Automatic payout policy and scheduler](src/main/kotlin/capital/automation/PayoutAutomation.kt).
+- [Versioned tenant API](src/main/kotlin/capital/api) and its [OpenAPI 3.1 contract](src/main/resources/api/openapi.json).
 
 The policy uses an illustrative 80% advance rate and 2.5% fee. Limits round down; fees round half-up and are deducted from principal. The optional reporting allowance defaults to zero extra days. Expected coverage is supplied by the fixture, not calculated from Apple or Google's reporting calendars.
 
@@ -98,7 +131,13 @@ The default developer view shows principal, the fixed 2.5% fee, and net payout t
 - [Validation evidence](docs/validation.md)
 - [Dashboard walkthrough](docs/dashboard.md)
 - [Public dataset and transformations](data/README.md)
+- [Post-disbursement lifecycle and tenant API](docs/lifecycle.md)
 - [Local deployment boundary](SECURITY.md)
+- [Release history](CHANGELOG.md)
+
+## Contributing
+
+Issues and pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) for the local setup, the changes that need tests, and the rules that protect financial invariants; participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). Report anything security-sensitive through the repository's private reporting rather than a public issue, as described in [SECURITY.md](SECURITY.md).
 
 ## License and release status
 

@@ -87,3 +87,36 @@ Added coverage proves non-default financial terms remain consistent across quote
 The developer browser view was inspected locally and displayed $200 principal, a 2.5% / $5 fee, and $195 net payout. Finance layout was also visually inspected. Automated desktop/mobile browser regressions are defined in `tests/browser`; their authoritative results are the corresponding GitHub Actions run, not this local backend test count.
 
 Dependency locks and SHA-256 verification metadata were generated. The subsequent normal local `check` passed with checksum enforcement. The first clean CI run then exposed missing parent/BOM metadata hidden by the warm local cache. Resolution from an empty Gradle cache added only missing metadata checksums; the reported coroutines BOM was independently compared with Maven Central. No existing checksum was changed and verification remained enabled. See the [engineering reference](engineering-reference.md) for implemented guarantees and remaining deployment work.
+
+## Entry-point and open-source polish
+
+The local `check` passed with **88 backend tests, zero failures, errors, or skipped tests**: 18 eligibility, 5 fixture, 4 command line, 3 configuration/policy, 4 evidence/telemetry, 6 monitoring, 22 payment integration, and 26 dashboard integration tests. The four added cases pin the packaged calculator's published contract: one decision record per fixture case, a parseable JSON array on stdout with no banner line, and refusals that name the offending field.
+
+The calculator's failure modes were exercised directly against the installed distribution. A missing file, a non-JSON file, a JSON array at the root, an unsupported currency, and an unparseable timestamp each produced one explanatory line on stderr and exit status 1, with no Java stack trace; a wrong argument count printed usage and exited 2; `--help` exited 0. Unexpected exception types deliberately keep their stack trace, so a defect stays visible rather than being reported as bad input.
+
+Every bound in `RuntimeConfig` now carries a message naming the variable, the accepted range, and the rejected value; `LAB_HTTP_PORT`, `LAB_HTTP_WORKERS`, `LAB_MAX_ACTIVE_RUNS`, and an inconsistent socket/statement timeout pair were each confirmed to report that way rather than Kotlin's bare `Failed requirement.`
+
+The dashboard's startup preflight was exercised with `LAB_JDBC_URL` pointed at a closed port. It reported the unreachable database, the `docker compose` command that starts it, the overriding environment variables, and the driver's own message, then exited before binding the HTTP port. Invalid `LAB_*` settings and an occupied port fail the same way. The database reachability check reuses the `/health/ready` query, so startup and the readiness endpoint cannot disagree.
+
+Prettier reported no formatting differences across the repository, `checkKotlinFormat` reported no Kotlin differences, and every relative Markdown link and README anchor was verified to resolve. The two test counts in the learning deck remain at 84 because both are explicitly attributed to CI at implementation commit `97a40ca`, where that number was correct.
+
+Pinned GitHub Actions digests for the added CodeQL and dependency-review workflows were each resolved against their upstream repository before use; the workflows themselves have not yet run remotely, and are not described here as passing.
+
+## Post-disbursement lifecycle, automation, and the tenant API
+
+The local `check` passed with **135 backend tests, zero failures, errors, or skipped tests**, adding 18 settlement, 15 automation/portfolio, and 14 API cases to the previous 88. Browser regressions remained at 6 passing, and Prettier and `checkKotlinFormat` reported no differences.
+
+`settlement.sql`, `automation.sql`, and `api.sql` are appended migrations; `capital.sql` was not edited. Before any Kotlin was written, `settlement.sql` was applied to a scratch schema under `ON_ERROR_STOP=1` and its four alterations were then verified by schema-scoped queries against `pg_constraint` and `information_schema`: the funding ledger's one-journal-per-advance unique constraint was replaced by a kind-scoped one, `RETURNED` was added to the advance state constraint, and `developers.payable_cents` exists. An earlier unscoped version of those queries matched leftover schemas from previous runs and was rerun scoped rather than trusted.
+
+The settlement suite was mutation-checked rather than assumed. Reordering the allocation waterfall to pay principal before recovery failed one test; removing the guard that refuses a bank return after store proceeds already repaid the principal failed another. Both mutations were reverted and the suite reconfirmed.
+
+Four defects were found by these tests and fixed rather than worked around:
+
+- Gson has no default binding for `java.time`, so any API result carrying a `LocalDate` failed to serialize. Because Gson's `JsonIOException` extends `JsonParseException`, that server-side failure was being reported to the caller as `400 INVALID_JSON` — a response fault presented as a malformed request. ISO-8601 adapters were registered and the serialization failure now reports `500 RESPONSE_NOT_SERIALIZABLE`.
+- A fractional `principalCents` reached the caller as `500`; `ArithmeticException` is now classified as `400 INVALID_INTEGER`.
+- An unknown API version returned `400` rather than `404`.
+- `ApiServer` resolved its own `public` schema from a `DatabaseConfig`, which made it untestable against an isolated schema. It now takes a `Database`, which is also the correct boundary.
+
+Tenancy and provenance were tested as behavior, not as configuration: a key for one developer requesting another developer's pool receives `404` rather than `403`, so it cannot learn the pool exists; a WRITE key is refused when it attempts to assert that a store remitted money, while an OPERATOR key succeeds on the identical request. Idempotency was exercised in all three directions — replay returns the original advance, a changed body under the same key conflicts, and a missing key is refused before anything is reserved.
+
+The automatic scheduler was verified to be blocked by the same controls as a manual request (risk hold and stale report coverage each produced a recorded `BLOCKED` decision and zero advances), and a weekly cadence was confirmed against the actual calendar: 2026-09-19 is a Saturday, so the following day remains in ISO week 38 and the day after opens week 39.
