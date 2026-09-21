@@ -11,7 +11,7 @@ dependencyLocking { lockAllConfigurations() }
 
 dependencies {
     formatter("com.facebook:ktfmt:0.64:with-dependencies")
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.google.code.gson:gson:2.14.0")
     implementation("org.postgresql:postgresql:42.7.8")
     testImplementation(kotlin("test-junit5"))
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.4")
