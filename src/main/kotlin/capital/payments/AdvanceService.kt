@@ -79,6 +79,17 @@ private data class Controls(
 
 private data class Check(val principalCapacity: Long, val reason: String?, val evidence: String)
 
+/** A non-binding view of current capacity, with the reason when none is offered. */
+data class Availability(
+    val principalCents: Long,
+    val blockedReason: String?,
+    val feeCents: Long,
+    val evidenceJson: String,
+) {
+    val netCashCents: Long
+        get() = principalCents - feeCents
+}
+
 private data class Claim(val advance: Advance, val recovery: Boolean)
 
 /**
@@ -175,6 +186,25 @@ class AdvanceService(
     }
 
     fun get(id: UUID): Advance = database.transaction { readAdvance(it, id) }
+
+    /**
+     * How much new principal this pool could support right now, with the policy evidence behind
+     * that number. A blocking reason yields zero rather than a figure a caller might act on.
+     *
+     * This is a quote, not a reservation: capacity is re-checked inside [reserve] under the same
+     * locks, so two callers reading the same availability cannot both consume it.
+     */
+    fun available(developerId: String, poolId: String): Availability =
+        database.transaction { connection ->
+            val controls = controls(connection, developerId, poolId)
+            val check = capacity(controls, controls.developer.destination)
+            Availability(
+                if (check.reason != null) 0 else check.principalCapacity,
+                check.reason,
+                terms.fee(if (check.reason != null) 0 else check.principalCapacity),
+                check.evidence,
+            )
+        }
 
     fun setHold(developerId: String, active: Boolean) = database.transaction { connection ->
         lockDeveloper(connection, developerId)

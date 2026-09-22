@@ -92,6 +92,8 @@ fun main() {
     val capital = config.database.database("capital_$suffix")
     val bank = config.database.database("bank_$suffix")
     capital.install("/db/capital.sql")
+    capital.install("/db/settlement.sql")
+    capital.install("/db/automation.sql")
     bank.install("/db/bank.sql")
     val output =
         GsonBuilder().setPrettyPrinting().create().toJson(runPaymentScenario(capital, bank))

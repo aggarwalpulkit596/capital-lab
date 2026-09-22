@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security or deployment-boundary concern
+    url: https://github.com/aggarwalpulkit596/capital-lab/security
+    about: Report privately through the security tab. Do not open a public issue for a vulnerability.
+  - name: Start here — dashboard walkthrough
+    url: https://github.com/aggarwalpulkit596/capital-lab/blob/main/docs/dashboard.md
+    about: The five-minute tour and an explicit statement of what the lab does and does not model.
+  - name: Scope of the implemented slice
+    url: https://github.com/aggarwalpulkit596/capital-lab/blob/main/docs/engineering-reference.md
+    about: Check the implemented boundaries before reporting a missing production capability.

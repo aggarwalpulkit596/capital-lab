@@ -217,6 +217,8 @@ class DashboardIntegrationTest {
         val bank =
             Database(postgres.jdbcUrl, postgres.username, postgres.password, "test_b_$suffix")
         capital.install("/db/capital.sql")
+        capital.install("/db/settlement.sql")
+        capital.install("/db/automation.sql")
         capital.install("/db/dashboard.sql")
         bank.install("/db/bank.sql")
         seedScenario(capital, bank)

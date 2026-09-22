@@ -11,6 +11,7 @@ import com.google.gson.JsonParser
 import com.sun.net.httpserver.HttpExchange
 import com.sun.net.httpserver.HttpServer
 import java.io.IOException
+import java.net.BindException
 import java.net.InetSocketAddress
 import java.nio.file.Path
 import java.sql.SQLException
@@ -19,6 +20,7 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 private class ApiFailure(val status: Int, val code: String, override val message: String) :
     RuntimeException(message)
@@ -283,6 +285,8 @@ class DashboardServer(
         val capital = databaseConfig.database("lab_c_$id")
         val bank = databaseConfig.database("lab_b_$id")
         capital.install("/db/capital.sql")
+        capital.install("/db/settlement.sql")
+        capital.install("/db/automation.sql")
         bank.install("/db/bank.sql")
         return LabRun(id, scenario, capital, bank, date, purpose).also { runs[id] = it }
     }
@@ -342,17 +346,46 @@ class DashboardServer(
     }
 }
 
-fun main() {
-    val config = RuntimeConfig.fromEnvironment()
-    val server =
-        DashboardServer(
-            config.database,
-            config.http,
-            config.evidenceDirectory,
+/**
+ * Fails before the port is bound when the demo database is unreachable, so the operator reads one
+ * actionable line in the terminal instead of discovering the outage per request in the browser.
+ */
+private fun requireReachableDatabase(config: DatabaseConfig) {
+    try {
+        config.database("public").transaction { it.number("SELECT 1") }
+    } catch (failure: SQLException) {
+        System.err.println("Cannot reach the demo database at ${config.url} as ${config.user}.")
+        System.err.println("Start it with: docker compose up -d --wait postgres")
+        System.err.println(
+            "Override the target with LAB_JDBC_URL, LAB_DB_USER and LAB_DB_PASSWORD."
         )
+        System.err.println("Driver reported: ${failure.message}")
+        exitProcess(1)
+    }
+}
+
+fun main() {
+    val config =
+        try {
+            RuntimeConfig.fromEnvironment()
+        } catch (failure: IllegalArgumentException) {
+            System.err.println("Invalid runtime configuration: ${failure.message}")
+            System.err.println("See docs/runbook.md for the supported LAB_* environment variables.")
+            exitProcess(2)
+        }
+    requireReachableDatabase(config.database)
+    val server =
+        try {
+            DashboardServer(config.database, config.http, config.evidenceDirectory)
+        } catch (failure: BindException) {
+            System.err.println("Port ${config.http.port} on 127.0.0.1 is already in use.")
+            System.err.println("Stop the other dashboard, or set LAB_HTTP_PORT to a free port.")
+            exitProcess(1)
+        }
     Runtime.getRuntime().addShutdownHook(Thread { server.close() })
     println("Capital Lab dashboard: ${server.address}")
     println(
         "Synthetic money only. Previous server sessions are available as read-only evidence archives."
     )
+    println("Stop with Ctrl-C, then stop the database with: docker compose stop postgres")
 }

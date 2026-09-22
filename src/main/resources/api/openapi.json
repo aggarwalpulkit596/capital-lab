@@ -1,0 +1,967 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Capital Lab API",
+    "version": "1.0.0",
+    "summary": "Local teaching API for app-store receivables financing.",
+    "description": "All money is synthetic and this server binds to loopback only. Amounts are USD cents as integers; no endpoint accepts a fractional amount. The developer is always resolved from the API key, never from a path or body field, so a key cannot address another tenant's pools.\n\nScopes are ordered READ < WRITE < OPERATOR. OPERATOR is required for facts that originate outside the developer (a store remitting money, a refund revising proceeds, a bank returning a transfer), because a developer must not be able to assert that a store paid them.",
+    "license": {
+      "name": "Apache-2.0",
+      "identifier": "Apache-2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8082",
+      "description": "Local lab"
+    }
+  ],
+  "security": [
+    {
+      "apiKey": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Position",
+      "description": "What the developer currently owes and can draw."
+    },
+    {
+      "name": "Advances",
+      "description": "Requesting and inspecting advances."
+    },
+    {
+      "name": "Automation",
+      "description": "Automatic payout policy and cycles."
+    },
+    {
+      "name": "Settlement",
+      "description": "Store money, refunds, returns, and residual release."
+    },
+    {
+      "name": "Underwriting",
+      "description": "Illustrative risk model output. Advisory only."
+    }
+  ],
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "summary": "Liveness",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "The process is up."
+          }
+        }
+      }
+    },
+    "/v1/openapi.json": {
+      "get": {
+        "summary": "This document",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "The OpenAPI description of this API."
+          }
+        }
+      }
+    },
+    "/v1/portfolio": {
+      "get": {
+        "tags": ["Position"],
+        "summary": "Aggregate position across every pool",
+        "description": "Read-only and uncommitted-to: these figures take no locks and may be stale the moment they are returned. Reservation re-checks capacity under lock, so a portfolio number must never be treated as an authorization to fund.",
+        "responses": {
+          "200": {
+            "description": "The developer's position.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Portfolio"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/pools/{poolId}/availability": {
+      "get": {
+        "tags": ["Position"],
+        "summary": "Principal this pool could support right now",
+        "description": "A quote, not a reservation. A blocking reason yields zero principal rather than a figure the caller might act on. The policy evidence behind the number is included.",
+        "parameters": [
+          {
+            "name": "poolId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current availability with its evidence.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Availability"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/advances": {
+      "post": {
+        "tags": ["Advances"],
+        "summary": "Reserve and dispatch an advance",
+        "description": "Requires an Idempotency-Key header. Replaying the same key with the same request returns the original advance; replaying it with a different request is a conflict rather than a second advance.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["poolId", "principalCents"],
+                "properties": {
+                  "poolId": {
+                    "type": "string"
+                  },
+                  "principalCents": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Capacity reserved and a dispatch intent recorded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Advance"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "409": {
+            "description": "The idempotency key is already bound to a different request."
+          },
+          "422": {
+            "description": "Policy declined the request; the reason code explains which control fired."
+          }
+        }
+      }
+    },
+    "/v1/advances/{advanceId}": {
+      "get": {
+        "tags": ["Advances"],
+        "summary": "Inspect one advance",
+        "parameters": [
+          {
+            "name": "advanceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The advance.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Advance"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/v1/advances/{advanceId}/return": {
+      "post": {
+        "tags": ["Settlement"],
+        "summary": "Record a bank return of a settled advance",
+        "description": "OPERATOR scope. Appends a reversing journal; the original funding posting is never edited. Refused once store proceeds have already repaid the principal, because that conflict needs a human.",
+        "parameters": [
+          {
+            "name": "advanceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["reasonCode"],
+                "properties": {
+                  "reasonCode": {
+                    "type": "string",
+                    "description": "The provider's own return code, for example R01.",
+                    "examples": ["R01_INSUFFICIENT_FUNDS"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "REVERSED, ALREADY_REVERSED, or REJECTED with an explanation."
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          }
+        }
+      }
+    },
+    "/v1/payout-policy": {
+      "get": {
+        "tags": ["Automation"],
+        "summary": "Read the payout policy",
+        "responses": {
+          "200": {
+            "description": "The configured policy.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutPolicy"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Automation"],
+        "summary": "Set the payout policy",
+        "description": "AUTOMATIC mode lets a cycle reserve capacity with no human request. The scheduler never overrides policy: holds, limits, destination changes, and stale reports block an automatic payout exactly as they block a manual one.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutPolicy"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The stored policy."
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/v1/payout-cycles": {
+      "post": {
+        "tags": ["Automation"],
+        "summary": "Run this period's automatic cycle",
+        "description": "A cycle is unique per developer and period, so running it twice in the same period does nothing. Every pool examined is reported, including the ones deliberately skipped and why.",
+        "responses": {
+          "200": {
+            "description": "RAN, ALREADY_RAN, PAUSED, NOT_AUTOMATIC, or NO_POLICY.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CycleResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/remittances": {
+      "post": {
+        "tags": ["Settlement"],
+        "summary": "Apply money received from a store",
+        "description": "OPERATOR scope. One remittance may cover many pools and may be partial. Per pool the waterfall is fixed: open recovery, then outstanding principal, then developer residual. Lines that do not total the received amount post nothing, and cash naming an unknown pool is held unapplied rather than absorbed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Remittance"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "APPLIED, PARTIALLY_APPLIED, ALREADY_APPLIED, or REJECTED."
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          },
+          "409": {
+            "description": "The same id was presented with a different amount."
+          }
+        }
+      }
+    },
+    "/v1/proceeds-revisions": {
+      "post": {
+        "tags": ["Settlement"],
+        "summary": "Revise a pool's expected proceeds downward",
+        "description": "OPERATOR scope. Refunds and chargebacks shrink the receivable after funding. Principal above the revised limit is reclassified as recoverable from the developer; it is not forgiven, and the developer's total outstanding is unchanged. Money already advanced is never retrieved by this posting.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProceedsRevision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "WITHIN_LIMIT, RECLASSIFIED, ALREADY_APPLIED, or REJECTED."
+          },
+          "403": {
+            "$ref": "#/components/responses/InsufficientScope"
+          }
+        }
+      }
+    },
+    "/v1/residual-payouts": {
+      "post": {
+        "tags": ["Settlement"],
+        "summary": "Release residual proceeds to the developer",
+        "description": "Open recovery obligations are netted first across every pool. Release is a posting; instructing the outbound transfer is a separate dispatch, so a bookkeeping release is never mistaken for settled cash.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["payoutId"],
+                "properties": {
+                  "payoutId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PAID, FULLY_RECOVERED, NOTHING_PAYABLE, ALREADY_PAID, or REJECTED."
+          }
+        }
+      }
+    },
+    "/v1/pools/{poolId}/underwriting": {
+      "get": {
+        "tags": ["Underwriting"],
+        "summary": "Risk assessment for this pool",
+        "description": "Derives an advance rate from observed history (refund and chargeback rate, tenure, dispersion of daily gross), applies portfolio caps (concentration above a size floor, and velocity against observed gross), and runs the abuse rule set.\n\nAdvisory only. Nothing here changes a limit or blocks a payout; the authoritative controls are enforced under lock in the reservation path. Every threshold is illustrative and chosen to make the mechanism legible, not fitted to outcomes: a real advance rate needs observed repayment performance, a credit owner, and a model risk review.",
+        "parameters": [
+          {
+            "name": "poolId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "requestedCents",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "The amount to assess the portfolio caps and abuse rules against."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The assessment, with the factors behind every number.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnderwritingAssessment"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Issued keys are stored only as SHA-256 digests, so a key cannot be read back out of the database."
+      }
+    },
+    "responses": {
+      "Unauthenticated": {
+        "description": "No usable API key was presented.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "InsufficientScope": {
+        "description": "The key is valid but lacks the scope this route requires.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "No such resource for this developer.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "The request was malformed or a field was unusable.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "PoolPosition": {
+        "type": "object",
+        "properties": {
+          "poolId": {
+            "type": "string"
+          },
+          "netProceedsCents": {
+            "type": "integer"
+          },
+          "settledProceedsCents": {
+            "type": "integer"
+          },
+          "fundedLifetimeCents": {
+            "type": "integer"
+          },
+          "outstandingCents": {
+            "type": "integer"
+          },
+          "reservedCents": {
+            "type": "integer"
+          },
+          "openRecoveryCents": {
+            "type": "integer"
+          },
+          "closed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Portfolio": {
+        "type": "object",
+        "properties": {
+          "developerId": {
+            "type": "string"
+          },
+          "limitCents": {
+            "type": "integer"
+          },
+          "outstandingCents": {
+            "type": "integer"
+          },
+          "reservedCents": {
+            "type": "integer"
+          },
+          "headroomCents": {
+            "type": "integer"
+          },
+          "payableCents": {
+            "type": "integer"
+          },
+          "openRecoveryCents": {
+            "type": "integer"
+          },
+          "fundedLifetimeCents": {
+            "type": "integer"
+          },
+          "onHold": {
+            "type": "boolean"
+          },
+          "openPools": {
+            "type": "integer"
+          },
+          "largestPoolShareBasisPoints": {
+            "type": "integer",
+            "description": "Share of outstanding principal in the single largest pool. Reported as an observation; nothing acts on it."
+          },
+          "positions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoolPosition"
+            }
+          }
+        }
+      },
+      "Availability": {
+        "type": "object",
+        "properties": {
+          "poolId": {
+            "type": "string"
+          },
+          "principalCents": {
+            "type": "integer"
+          },
+          "feeCents": {
+            "type": "integer"
+          },
+          "netCashCents": {
+            "type": "integer"
+          },
+          "blockedReason": {
+            "type": ["string", "null"],
+            "description": "RISK_HOLD, DESTINATION_CHANGED, POOL_CLOSED, or REPORT_COVERAGE_BEHIND."
+          },
+          "evidence": {
+            "type": "object",
+            "description": "The decision record behind this figure, including policy version and rounding conventions."
+          }
+        }
+      },
+      "Advance": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "poolId": {
+            "type": "string"
+          },
+          "principalCents": {
+            "type": "integer"
+          },
+          "feeCents": {
+            "type": "integer"
+          },
+          "cashCents": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "READY",
+              "DISPATCHING",
+              "UNKNOWN",
+              "SETTLED",
+              "REJECTED",
+              "CANCELED",
+              "RETURNED"
+            ]
+          },
+          "bankTransferId": {
+            "type": ["string", "null"]
+          },
+          "lastReason": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "PayoutPolicy": {
+        "type": "object",
+        "required": ["mode", "minimumCents"],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": ["MANUAL", "AUTOMATIC"]
+          },
+          "minimumCents": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Below this, a cycle leaves capacity alone rather than sending dust."
+          },
+          "maximumCents": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Per-cycle cap independent of policy capacity. 0 means no extra cap."
+          },
+          "cadence": {
+            "type": "string",
+            "enum": ["DAILY", "WEEKLY"]
+          },
+          "paused": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PoolDecision": {
+        "type": "object",
+        "properties": {
+          "poolId": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": ["REQUESTED", "BELOW_MINIMUM", "NO_CAPACITY", "BLOCKED", "FAILED"]
+          },
+          "availableCents": {
+            "type": "integer"
+          },
+          "requestedCents": {
+            "type": "integer"
+          },
+          "advanceId": {
+            "type": ["string", "null"],
+            "format": "uuid"
+          },
+          "reason": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "CycleResult": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["RAN", "ALREADY_RAN", "NOT_AUTOMATIC", "PAUSED", "NO_POLICY"]
+          },
+          "cycleId": {
+            "type": ["string", "null"]
+          },
+          "cycleDate": {
+            "type": ["string", "null"],
+            "format": "date"
+          },
+          "decisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PoolDecision"
+            }
+          },
+          "explanation": {
+            "type": "string"
+          }
+        }
+      },
+      "Remittance": {
+        "type": "object",
+        "required": ["remittanceId", "store", "developerId", "receivedCents", "lines"],
+        "properties": {
+          "remittanceId": {
+            "type": "string"
+          },
+          "store": {
+            "type": "string",
+            "examples": ["apple", "google"]
+          },
+          "developerId": {
+            "type": "string"
+          },
+          "receivedCents": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "lines": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Must total receivedCents exactly; any difference is unexplained and posts nothing.",
+            "items": {
+              "type": "object",
+              "required": ["poolId", "cents"],
+              "properties": {
+                "poolId": {
+                  "type": "string"
+                },
+                "cents": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "final": {
+                  "type": "boolean",
+                  "description": "The store declaring this is the last money for that pool. Not an assertion that principal was repaid."
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProceedsRevision": {
+        "type": "object",
+        "required": ["revisionId", "poolId", "reason", "reductionCents"],
+        "properties": {
+          "revisionId": {
+            "type": "string"
+          },
+          "poolId": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "enum": ["REFUND", "CHARGEBACK", "STORE_ADJUSTMENT"]
+          },
+          "reductionCents": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "RateFactor": {
+        "type": "object",
+        "description": "One named contribution to the advance rate, so a rate can always be explained.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": ["REFUND_RATE", "SHORT_HISTORY", "VOLATILE_SALES", "FLOOR_APPLIED"]
+          },
+          "deltaBasisPoints": {
+            "type": "integer"
+          },
+          "explanation": {
+            "type": "string"
+          }
+        }
+      },
+      "Constraint": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": ["CONCENTRATION", "VELOCITY"]
+          },
+          "permittedCents": {
+            "type": "integer"
+          },
+          "explanation": {
+            "type": "string"
+          }
+        }
+      },
+      "FraudSignal": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "RECENT_DESTINATION_CHANGE",
+              "REVENUE_SPIKE",
+              "NEW_ACCOUNT_LARGE_REQUEST",
+              "POST_FUNDING_REFUND_SPIKE",
+              "CHARGEBACK_LEVEL"
+            ]
+          },
+          "verdict": {
+            "type": "string",
+            "enum": ["ALLOW", "REVIEW", "BLOCK"]
+          },
+          "explanation": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "object",
+            "description": "The numbers this signal fired on, so the decision can be re-derived."
+          }
+        }
+      },
+      "UnderwritingAssessment": {
+        "type": "object",
+        "properties": {
+          "poolId": {
+            "type": "string"
+          },
+          "policyVersion": {
+            "type": "string"
+          },
+          "advisory": {
+            "type": "string"
+          },
+          "observation": {
+            "type": "object",
+            "description": "Observed history. A missing day is a shorter window, never a zero.",
+            "properties": {
+              "tenureDays": {
+                "type": "integer"
+              },
+              "grossCents": {
+                "type": "integer"
+              },
+              "refundCents": {
+                "type": "integer"
+              },
+              "chargebackCents": {
+                "type": "integer"
+              },
+              "refundRateBasisPoints": {
+                "type": "integer"
+              },
+              "volatilityBasisPoints": {
+                "type": "integer"
+              },
+              "repaidPools": {
+                "type": "integer"
+              }
+            }
+          },
+          "advanceRate": {
+            "type": "object",
+            "properties": {
+              "basisPoints": {
+                "type": "integer"
+              },
+              "baseBasisPoints": {
+                "type": "integer"
+              },
+              "factors": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RateFactor"
+                }
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          },
+          "exposure": {
+            "type": "object",
+            "properties": {
+              "requestedCents": {
+                "type": "integer"
+              },
+              "permittedCents": {
+                "type": "integer"
+              },
+              "constraints": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Constraint"
+                }
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          },
+          "fraud": {
+            "type": "object",
+            "properties": {
+              "verdict": {
+                "type": "string",
+                "enum": ["ALLOW", "REVIEW", "BLOCK"]
+              },
+              "signals": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FraudSignal"
+                }
+              },
+              "explanation": {
+                "type": "string"
+              }
+            }
+          },
+          "steppedLimitCents": {
+            "type": "integer",
+            "description": "Base limit plus credit earned by fully repaid pools, capped."
+          }
+        }
+      }
+    }
+  }
+}

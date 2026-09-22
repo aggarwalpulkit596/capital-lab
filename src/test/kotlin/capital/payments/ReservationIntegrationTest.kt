@@ -63,6 +63,7 @@ class ReservationIntegrationTest {
         bankDatabase =
             Database(postgres.jdbcUrl, postgres.username, postgres.password, "bank_$suffix")
         database.install("/db/capital.sql")
+        database.install("/db/settlement.sql")
         bankDatabase.install("/db/bank.sql")
         seedScenario(database, bankDatabase)
         server = FakeBankServer(bankDatabase)
