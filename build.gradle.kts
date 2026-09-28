@@ -14,7 +14,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("org.postgresql:postgresql:42.7.8")
     testImplementation(kotlin("test-junit5"))
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.4")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
     testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
 }
