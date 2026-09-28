@@ -1,6 +1,7 @@
 # This is a Gradle generated file for dependency locking.
 # Manual edits can break the build and are not advised.
 # This file is expected to be part of source control.
+# To regenerate this file, run: ./gradlew :dependencies --write-locks
 com.facebook:ktfmt:0.64=formatter
 com.fasterxml.jackson.core:jackson-annotations:2.20=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
 com.github.docker-java:docker-java-api:3.7.1=testCompileClasspath,testImplementationDependenciesMetadata,testRuntimeClasspath
